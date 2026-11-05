@@ -32,8 +32,6 @@ html[data-theme="dark"] {
   --canvas-top: #131516;
   --canvas-mid: #0e0f10;
   --canvas-bottom: #0a0b0c;
-  --glow-a: rgba(0, 200, 83, 0.16);
-  --glow-b: rgba(0, 200, 83, 0.08);
   --grain: 0.03;
 
   /* The scene behind the glass: the field text is what the lens bends. */
@@ -111,8 +109,6 @@ html[data-theme="light"] {
   --canvas-top: #fafaf8;
   --canvas-mid: #f3f4f1;
   --canvas-bottom: #eef0ec;
-  --glow-a: rgba(0, 168, 84, 0.1);
-  --glow-b: rgba(0, 168, 84, 0.06);
   --grain: 0.02;
 
   --field-text: rgba(20, 28, 23, 0.05);
@@ -159,18 +155,14 @@ html[data-theme="light"] {
   --code-focus: rgba(0, 168, 84, 0.08);
 }
 
-/* Scene: a graphite canvas lit by one green source behind the specimen and one
-   behind the call to action. The field text is what the glass bends. */
+/* Scene: a neutral graphite canvas. The field text is what the glass bends. */
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(48rem 32rem at 78% 6%, var(--glow-a), transparent 68%),
-    radial-gradient(56rem 38rem at 50% 106%, var(--glow-b), transparent 70%),
-    linear-gradient(180deg, var(--canvas-top) 0%, var(--canvas-mid) 55%, var(--canvas-bottom) 100%);
+  background: linear-gradient(180deg, var(--canvas-top) 0%, var(--canvas-mid) 55%, var(--canvas-bottom) 100%);
 }
 
 .bd {
