@@ -54,6 +54,11 @@ type FilterEntry = {
   /** The three-pass primitives and their one-pass scroll twin. */
   fullNodes: Node[];
   scrollNodes: Node[];
+  /** Target scales of the three displacement passes, and their cab-0 value. */
+  targetScales: number[];
+  baseScale: number;
+  /** The displacement maps currently mounted in the full form. */
+  maps: Element[];
   /** Boxes that reference this filter; the last one releases it. */
   users: Set<HTMLElement>;
   mode: FilterMode;
@@ -62,6 +67,8 @@ type FilterEntry = {
 /** Filters keyed by the geometry that produced them. */
 const filters = new Map<string, FilterEntry>();
 let filterMode: FilterMode = "full";
+let restoreFrame = 0;
+const RESTORE_MS = 480;
 
 /** Parse one <filter>; an empty node is what malformed markup degrades to. */
 function parseFilterMarkup(markup: string): SVGFilterElement | null {
@@ -79,17 +86,29 @@ function installFilter(fullMarkup: string, scrollMarkup: string): FilterEntry | 
   const filter = document.importNode(full, true);
   filter.id = id;
   filterDefs.append(filter);
+  const scales = [...full.querySelectorAll("feDisplacementMap")].map((map) =>
+    Number(map.getAttribute("scale")),
+  );
   const entry: FilterEntry = {
     id,
     filter,
     fullNodes: [...full.children].map((node) => node.cloneNode(true)),
     scrollNodes: [...scroll.children].map((node) => node.cloneNode(true)),
+    targetScales: scales,
+    baseScale: scales.length > 0 ? Math.min(...scales) : 0,
+    maps: [],
     users: new Set(),
     mode: "full",
   };
   if (filterMode === "scroll") {
     filter.replaceChildren(...entry.scrollNodes.map((node) => node.cloneNode(true)));
     entry.mode = "scroll";
+  } else {
+    entry.maps = [...filter.querySelectorAll("feDisplacementMap")];
+    // A filter that arrives during the restore fade starts with the others.
+    if (restoreFrame !== 0) {
+      for (const map of entry.maps) map.setAttribute("scale", String(entry.baseScale));
+    }
   }
   return entry;
 }
@@ -125,15 +144,63 @@ function releaseFilter(box: HTMLElement): void {
   delete box.dataset.filterId;
 }
 
+/** Fade the three dispersion scales in after the scroll ends. A cab-0
+    three-pass filter renders exactly like the one-pass scroll form, so the
+    transition starts without a pop and only the R/B fringe fades in. */
+function animateRestore(): void {
+  const started = performance.now();
+  const step = (now: number): void => {
+    const t = Math.min((now - started) / RESTORE_MS, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    for (const entry of filters.values()) {
+      if (entry.mode !== "full" || entry.maps.length !== 3) continue;
+      for (let i = 0; i < 3; i++) {
+        const target = entry.targetScales[i] ?? entry.baseScale;
+        const scale = entry.baseScale + (target - entry.baseScale) * eased;
+        entry.maps[i].setAttribute("scale", scale.toFixed(2));
+      }
+    }
+    if (t < 1) {
+      restoreFrame = requestAnimationFrame(step);
+      return;
+    }
+    restoreFrame = 0;
+    for (const entry of filters.values()) {
+      if (entry.mode !== "full") continue;
+      entry.maps.forEach((map, i) => map.setAttribute("scale", String(entry.targetScales[i] ?? entry.baseScale)));
+    }
+  };
+  restoreFrame = requestAnimationFrame(step);
+}
+
 /** Swap every installed filter between the rest and scroll forms. */
 function setFilterMode(mode: FilterMode): void {
+  if (filterMode === mode) return;
   filterMode = mode;
-  for (const entry of filters.values()) {
-    if (entry.mode === mode) continue;
-    const nodes = mode === "scroll" ? entry.scrollNodes : entry.fullNodes;
-    entry.filter.replaceChildren(...nodes.map((node) => node.cloneNode(true)));
-    entry.mode = mode;
+
+  if (mode === "scroll") {
+    if (restoreFrame !== 0) {
+      cancelAnimationFrame(restoreFrame);
+      restoreFrame = 0;
+    }
+    for (const entry of filters.values()) {
+      if (entry.mode === "scroll") continue;
+      entry.filter.replaceChildren(...entry.scrollNodes.map((node) => node.cloneNode(true)));
+      entry.mode = "scroll";
+      entry.maps = [];
+    }
+    return;
   }
+
+  // Restore the full graph at cab 0, then ease the dispersion back in.
+  for (const entry of filters.values()) {
+    if (entry.mode === "full") continue;
+    entry.filter.replaceChildren(...entry.fullNodes.map((node) => node.cloneNode(true)));
+    entry.mode = "full";
+    entry.maps = [...entry.filter.querySelectorAll("feDisplacementMap")];
+    for (const map of entry.maps) map.setAttribute("scale", String(entry.baseScale));
+  }
+  if (restoreFrame === 0) animateRestore();
 }
 
 document.addEventListener("lg-scroll", (event) => {
