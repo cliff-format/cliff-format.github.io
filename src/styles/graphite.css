@@ -182,7 +182,10 @@ html[data-theme="light"] {
   align-content: start;
   row-gap: 0.5rem;
   padding-block: clamp(2rem, 6vh, 4rem);
-  overflow: hidden;
+  /* The rows must be able to extend past the field's rotated box. Clipping
+     here would cut the text at a diagonal edge that crosses the viewport on
+     tablets and phones, leaving the right side blank. */
+  overflow: visible;
   color: var(--field-text);
   direction: ltr;
   /* The SVG's text weave is rotated -20°; the rows inherit that slant. */
@@ -192,6 +195,9 @@ html[data-theme="light"] {
 .text-row {
   position: relative;
   flex: none;
+  /* Size the row to its track; the fixed backdrop, not the narrow rotated
+     field, decides where the weave is clipped. */
+  width: max-content;
   overflow: hidden;
 }
 .text-track {

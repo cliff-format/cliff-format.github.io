@@ -95,6 +95,7 @@
 字号 `1.375rem`（22px），行高 `1.15`，行高网格 `1.673em`，行距 `0.5rem`；字重 `600`，由 Field Sans 的 400 字面合成。场层 `inset: -70% -15%` 容纳 80 行，视口只看到一段。颜色 `--field-text`（约 0.06 不透明度）。
 
 - 背景漂移保留：`text-track` 的 transform 循环，`prefers-reduced-motion` 与 `?static=1` 会停下。它是玻璃的 backdrop，线性 60fps 漂移会让每块玻璃每帧重算；因此用 `steps()` 按 20 Hz 采样，最快可见行每步小于 1.5px，光学参数不变。`DRIFT_FPS` 在 `BackgroundText.astro`，`--drift-steps` 在 `graphite.css`。
+- 每行宽度是 `max-content`，`.bd-text` 不裁切横向溢出；旋转后的场层比 `inset` 盒更宽，由 `.backdrop` 在视口裁切。这样窄屏和竖屏的右侧不会出现行尾断层。
 - 不要加 `will-change`，否则 80 条行会各自成为大图层。
 - Field Sans 只有约 10.6 KB，构建时预载并以 `font-display: block` 显示；没有远程字体等待或 fallback 换字。
 - 文本行位于玻璃后方，在滤镜层被折弯、被磨砂糊掉；不要再加回点阵。
