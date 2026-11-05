@@ -1,9 +1,10 @@
 """Build the fixed-cell OFL font for the decorative background.
 
-One merged Noto Sans family covers every glyph in the field: Noto Sans KR
-supplies Latin, Cyrillic, CJK, kana, and Hangul; Noto Sans supplies the four
-Latin Extended glyphs the KR file lacks. The result is renamed Field Sans and
-given a fixed 1em advance, so plain text keeps the 1.636em grid without spans.
+One merged Noto Sans family covers every glyph in the field: Noto Sans
+supplies Latin and Cyrillic, including the four Latin Extended glyphs the CJK
+file lacks; Noto Sans KR supplies CJK, kana, and Hangul. The result is renamed
+Field Sans and given a fixed 1em advance, so plain text keeps the 1.636em grid
+without spans or a Smiley fallback.
 
 Usage:
     python scripts/subset-field-font.py
@@ -69,7 +70,7 @@ def build(chars: str, kr_source: pathlib.Path, latin_source: pathlib.Path) -> in
     if "fvar" in kr:
         kr = instantiateVariableFont(kr, {"wght": 400}, inplace=False)
     latin = TTFont(latin_source)
-    sources = [("Noto Sans KR", kr), ("Noto Sans", latin)]
+    sources = [("Noto Sans", latin), ("Noto Sans KR", kr)]
 
     upm = 1000
     glyphs: dict[str, object] = {}

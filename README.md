@@ -22,7 +22,7 @@ src/
    └─ site.css          站点级一次性修正
 ```
 
-正文只用两族：Smiley Sans（得意黑）承担全部文案与界面，JetBrains Mono 只用于文件内容与安装命令。背景装饰字符例外：使用一份合并的 OFL **Field Sans**——Noto Sans KR 提供拉丁、西里尔、CJK、日文假名与韩文，Noto Sans 补齐 4 个拉丁扩展字符；共 126 字，一种风格。Field Sans 的每个字形固定 1em advance，背景字重由 400 合成到 600。正文的字重只有 400。
+正文只用两族：Smiley Sans（得意黑）承担全部文案与界面，JetBrains Mono 只用于文件内容与安装命令。背景装饰字符例外：使用一份合并的 OFL **Field Sans**——Noto Sans 提供全部拉丁与西里尔（含 4 个拉丁扩展字符），Noto Sans KR 提供 CJK、日文假名与韩文；共 126 字，合并为一个字体文件，背景不再使用 Smiley。Field Sans 的每个字形固定 1em advance，背景字重由 400 合成到 600。正文的字重只有 400。
 
 玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 data-URI SVG 位移滤镜：每个面板生成 `feImage` 法线图和 `feDisplacementMap`，通过 `backdrop-filter` 直接折弯真实背景；没有场景复制、canvas 或 WebGL。Chromium 渲染滤镜，Safari 与 Firefox 保留透明 tint、顶部光和阴影的 fallback。玻璃默认不模糊（blur 0），圆角与页头统一 40px。结构约定见 [docs/style.md](docs/style.md)，许可声明见 [THIRD-PARTY.md](THIRD-PARTY.md)。
 
