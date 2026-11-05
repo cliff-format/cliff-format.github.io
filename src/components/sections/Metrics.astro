@@ -1,0 +1,34 @@
+---
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const metrics = [
+  { id: "metrics-token", value: "47,499" },
+  { id: "metrics-context", value: "100%" },
+  { id: "metrics-fixes", value: "0.00" },
+  { id: "metrics-rewrite", value: "91.7%" },
+];
+---
+
+<section class="metrics wrap" aria-label={t(locale, "metrics-caption")}>
+  <div class="metrics-caption">
+    <span>{t(locale, "metrics-caption")}</span>
+    <span>{t(locale, "metrics-source")}</span>
+  </div>
+  <div class="metric-grid">
+    {
+      metrics.map((metric) => (
+        <div class="metric">
+          <span class="m-k">{t(locale, `${metric.id}-key`)}</span>
+          <span class="m-v">{metric.value}</span>
+          <span class="m-d">{t(locale, `${metric.id}-detail`)}</span>
+        </div>
+      ))
+    }
+  </div>
+</section>

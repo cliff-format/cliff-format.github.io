@@ -1,0 +1,534 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: ja-JP
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+target: "CLIFF ホーム"
+status: translated
+
+<nav-main>
+source: "主导航"
+target: "メインナビゲーション"
+status: translated
+
+<nav-format>
+source: "格式"
+target: "フォーマット"
+status: translated
+
+<nav-features>
+source: "特性"
+target: "特徴"
+status: translated
+
+<nav-lifecycle>
+source: "生命周期"
+target: "ライフサイクル"
+status: translated
+
+<nav-ecosystem>
+source: "生态"
+target: "エコシステム"
+status: translated
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+target: "GitHub で CLIFF を見る"
+status: translated
+
+<nav-theme>
+source: "深色模式"
+target: "ダークモード"
+status: translated
+
+<nav-skip>
+source: "跳到正文"
+target: "本文へスキップ"
+status: translated
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+target: "言語を切り替える"
+status: translated
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+target: "CLIFF — 文脈が、フォーマット。"
+status: translated
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+target: "CLIFF は文脈を優先し、1 行ずつ書くローカライズ用ワークファイル形式です。ローカライズのライフサイクル全体をカバーします。翻訳者が読め、モデルが編集でき、検証は一度で通ります。"
+status: translated
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+target: "文脈を残す。"
+status: translated
+
+<cta-heading-2>
+source: "交付好翻译。"
+target: "良い翻訳を届ける。"
+status: translated
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+target: "1.1 仕様を読み、実装をひとつ選び、実際の CLIFF ファイルをバリデータに通してください。"
+type: description
+status: translated
+
+<cta-action-spec>
+source: "阅读规范"
+target: "仕様を読む"
+status: translated
+
+<cta-action-repos>
+source: "浏览仓库"
+target: "リポジトリを見る"
+status: translated
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+target: "作業用フォーマットであり、"
+status: translated
+
+<features-heading-2>
+source: "而非交换容器。"
+target: "交換用の入れ物ではない。"
+status: translated
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+target: "以下の判断はすべて実測か仕様に基づいています。文脈はフォーマット自体が持ち、翻訳は推測しません。"
+type: description
+status: translated
+
+<features-context-title>
+source: "上下文随行"
+target: "文脈がついてくる"
+status: translated
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+target: "クラン・グループ・エントリの文脈は継承されます。翻訳者が文字列を開くと、どこにあり、誰に向けた言葉で、何を壊してはいけないかが分かります。"
+type: description
+status: translated
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+target: "クラン → グループ → エントリ"
+status: translated
+
+<features-line-title>
+source: "一行一个结构"
+target: "1 行に 1 つの構造"
+status: translated
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+target: "複数行にまたがる開始・終了タグはありません。行を挿入・移動・削除しても、閉じ忘れの構造は残りません。人もモデルもそれに依存しています。"
+type: description
+status: translated
+
+<features-line-tag>
+source: "单遍解析"
+target: "単一パスで解析"
+status: translated
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+target: "型があるべき場所に型がある"
+status: translated
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+target: "{type} と {status} は必須で、閉じた語彙が曖昧な入力を、バリデータが検査でき、ツールチェーンが信頼できるデータに変えます。"
+type: description
+status: translated
+
+<features-typed-tag>
+source: "封闭词表"
+target: "閉じた語彙"
+status: translated
+
+<features-model-title>
+source: "为模型编辑而生"
+target: "モデルの編集のために"
+status: translated
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+target: "寛容モードはモデルが実際に犯す誤りを修復し、推測ではなく修復ごとに報告します。厳格モードは文法が拒否するものを依然として拒否します。"
+type: description
+status: translated
+
+<features-model-tag>
+source: "严格 + 宽容"
+target: "厳格 + 寛容"
+status: translated
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+target: "最小のトークン請求"
+status: translated
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+target: "同じ文脈量なら、CLIFF 文書はテストした 10 形式の中で最も小さくなります。短いキー名と終了タグなしが、呼び出しのたびに効いてきます。"
+type: description
+status: translated
+
+<features-tokens-tag>
+source: "47,499 Token"
+target: "47,499 トークン"
+status: translated
+
+<features-icu-title>
+source: "ICU，原样保留"
+target: "ICU をそのまま保持"
+status: translated
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+target: "MessageFormat 1 と 2 は引用値の中で逐語的に保たれ、方言は自動判定されます。複雑な複数形や選択も例外ではなくなります。"
+type: description
+status: translated
+
+<features-icu-tag>
+source: "MF1 + MF2"
+target: "MF1 + MF2"
+status: translated
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+target: "文脈優先で 1 行ずつ書く、ローカライズ用ワークファイル形式。"
+type: description
+status: translated
+
+<footer-nav>
+source: "页脚"
+target: "フッター"
+status: translated
+
+<footer-copy>
+source: "复制安装命令"
+target: "インストールコマンドをコピー"
+status: translated
+
+<footer-resources>
+source: "资源"
+target: "リソース"
+status: translated
+
+<footer-spec>
+source: "规范 1.1"
+target: "仕様 1.1"
+status: translated
+
+<footer-abnf>
+source: "ABNF 语法"
+target: "ABNF 文法"
+status: translated
+
+<footer-style-guide>
+source: "风格指南"
+target: "スタイルガイド"
+status: translated
+
+<footer-rationale>
+source: "设计取舍"
+target: "設計の背景"
+status: translated
+
+<footer-changelog>
+source: "更新日志"
+target: "変更履歴"
+status: translated
+
+<footer-build>
+source: "构建"
+target: "ビルド"
+status: translated
+
+<footer-conformance>
+source: "一致性测试"
+target: "適合性テスト"
+status: translated
+
+<footer-implementations>
+source: "实现登记"
+target: "実装一覧"
+status: translated
+
+<footer-project>
+source: "项目"
+target: "プロジェクト"
+status: translated
+
+<footer-contributing>
+source: "贡献指南"
+target: "コントリビューション"
+status: translated
+
+<footer-security>
+source: "安全策略"
+target: "セキュリティ"
+status: translated
+
+<footer-license>
+source: "MIT 许可"
+target: "MIT ライセンス"
+status: translated
+
+<footer-community>
+source: "社区"
+target: "コミュニティ"
+status: translated
+
+<footer-discussions>
+source: "讨论"
+target: "ディスカッション"
+status: translated
+
+<footer-issues>
+source: "问题反馈"
+target: "イシュー"
+status: translated
+
+<footer-benchmark>
+source: "实测报告"
+target: "ベンチマーク"
+status: translated
+
+<footer-legal>
+source: "MIT License © {year}"
+target: "MIT License © {year}"
+type: sentence
+status: translated
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+target: "CLIFF コントリビューター"
+status: translated
+
+<footer-spec-short>
+source: "规范"
+target: "仕様"
+status: translated
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+target: "CLIFF 1.1 を公開"
+status: translated
+
+<hero-announce-link>
+source: "阅读更新日志"
+target: "変更履歴を読む"
+status: translated
+
+<hero-title-1>
+source: "上下文，"
+target: "文脈が、"
+status: translated
+
+<hero-title-2>
+source: "就是格式。"
+target: "フォーマット。"
+status: translated
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+target: "ローカライズのライフサイクル全体を見据えた、1 行ずつのワークファイル。クラン・グループ・エントリの文脈が文字列とともに流れます。翻訳者が読め、モデルが編集でき、検証は一度で通ります。"
+type: description
+status: translated
+
+<hero-action-spec>
+source: "阅读规范"
+target: "仕様を読む"
+status: translated
+
+<hero-action-github>
+source: "在 GitHub 查看"
+target: "GitHub で見る"
+status: translated
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+target: "v1.1 安定版"
+status: translated
+
+<hero-proof-license>
+source: "MIT 许可"
+target: "MIT ライセンス"
+status: translated
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+target: "10 形式と同条件で実測"
+status: translated
+
+<hero-figure-context>
+source: "上下文保留"
+target: "文脈を保持"
+status: translated
+
+<hero-figure-tokens>
+source: "更少 Token"
+target: "トークン削減"
+status: translated
+
+<hero-validated>
+source: "校验通过"
+target: "検証済み"
+status: translated
+
+<hero-fixes>
+source: "0 处修复"
+target: "修正 0 件"
+status: translated
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+target: "抽出から、"
+status: translated
+
+<lifecycle-heading-2>
+source: "到交付。"
+target: "納品まで。"
+status: translated
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+target: "CLIFF は一度きりの受け渡し物ではありません。同じファイルが抽出・翻訳・レビュー・納品を経て、各段階で文脈が保たれ、作り直されません。"
+type: description
+status: translated
+
+<lifecycle-extract-title>
+source: "提取"
+target: "抽出"
+status: translated
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+target: "インポータは既存のキーをグループパスに畳み、元の綴りを照合キーとして保持します。"
+type: description
+status: translated
+
+<lifecycle-translate-title>
+source: "翻译"
+target: "翻訳"
+status: translated
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+target: "翻訳者は 1 つのファイルでクラン・グループ・エントリの文脈を見られます。モデルが受け取るのは安全でトークンの少ない文書です。"
+type: description
+status: translated
+
+<lifecycle-review-title>
+source: "审校"
+target: "レビュー"
+status: translated
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+target: "必須フィールドと閉じた語彙により、レビューは機械的に確認できます。修復はすべて報告され、黙って作り話をされることはありません。"
+type: description
+status: translated
+
+<lifecycle-deliver-title>
+source: "交付"
+target: "納品"
+status: translated
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+target: "ランタイム・エンジンのマニフェスト・翻訳メモリへ書き出せます。元の文脈を作り直す必要はありません。"
+type: description
+status: translated
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+target: "実測結果"
+status: translated
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+target: "cliff-test：960 回の翻訳呼び出し、16 文書"
+type: description
+status: translated
+
+<metrics-token-key>
+source: "Token"
+target: "トークン"
+status: translated
+
+<metrics-token-detail>
+source: "十种格式中最低"
+target: "10 形式で最少"
+type: description
+status: translated
+
+<metrics-context-key>
+source: "上下文"
+target: "文脈"
+status: translated
+
+<metrics-context-detail>
+source: "往返后完整保留"
+target: "往復後も完全に保持"
+type: description
+status: translated
+
+<metrics-fixes-key>
+source: "修复"
+target: "修正"
+status: translated
+
+<metrics-fixes-detail>
+source: "每次往返"
+target: "往復あたり"
+type: description
+status: translated
+
+<metrics-rewrite-key>
+source: "单次重写"
+target: "一括書き換え"
+status: translated
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+target: "書き換え成功率"
+type: description
+status: translated

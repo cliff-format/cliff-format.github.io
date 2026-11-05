@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Hero from "../../components/sections/Hero.astro";
+import Metrics from "../../components/sections/Metrics.astro";
+import Features from "../../components/sections/Features.astro";
+import Lifecycle from "../../components/sections/Lifecycle.astro";
+import Cta from "../../components/sections/Cta.astro";
+import { LOCALES, LOCALE_PREFIX, type Locale } from "../../i18n";
+
+export function getStaticPaths() {
+  return LOCALES.filter((locale) => LOCALE_PREFIX[locale].length > 0).map((locale) => ({
+    params: { lang: LOCALE_PREFIX[locale] },
+    props: { locale },
+  }));
+}
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<BaseLayout {locale}>
+  <Header {locale} />
+  <main id="main">
+    <Hero {locale} />
+    <Metrics {locale} />
+    <Features {locale} />
+    <Lifecycle {locale} />
+    <Cta {locale} />
+  </main>
+  <Footer {locale} />
+</BaseLayout>

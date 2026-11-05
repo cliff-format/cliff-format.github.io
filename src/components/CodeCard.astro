@@ -1,0 +1,33 @@
+---
+import Icon from "./Icon.astro";
+import { t, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="code-card pane">
+  <div class="code-surface pane-surface">
+    <div class="code-head">
+      <span class="code-file">
+        <Icon name="file" />
+        settings.zh-CN.cliff
+      </span>
+      <span class="code-valid">
+        <Icon name="check" />
+        {t(locale, "hero-validated")}
+      </span>
+    </div>
+    <div class="code-body">
+      <pre><code><span class="cl"><span class="c-dir">CLIFF 1.1</span></span><span class="cl"><span class="c-key">namespace</span><span class="c-op">:</span> <span class="c-lit">demo</span></span><span class="cl"><span class="c-key">clan</span><span class="c-op">:</span> <span class="c-lit">settings</span></span><span class="cl"><span class="c-key">source-language</span><span class="c-op">:</span> <span class="c-lit">en-US</span></span><span class="cl"><span class="c-key">target-language</span><span class="c-op">:</span> <span class="c-lit">zh-CN</span></span><span class="cl c-blank"></span><span class="cl"><span class="c-section">[Video]</span></span><span class="cl"><span class="c-key">type</span><span class="c-op">:</span> <span class="c-lit">label</span></span><span class="cl"><span class="c-key">context</span><span class="c-op">:</span> <span class="c-str">"设置 &gt; 视频"</span></span><span class="cl c-blank"></span><span class="cl c-focus"><span class="c-id">&lt;Resolution&gt;</span></span><span class="cl c-focus"><span class="c-key">source</span><span class="c-op">:</span> <span class="c-str">"Resolution"</span></span><span class="cl c-focus"><span class="c-key">target</span><span class="c-op">:</span> <span class="c-str" lang="zh-CN">"分辨率"</span></span><span class="cl c-focus"><span class="c-key">type</span><span class="c-op">:</span> <span class="c-lit">noun</span></span><span class="cl c-focus"><span class="c-key">status</span><span class="c-op">:</span> <span class="c-final">final</span></span></code></pre>
+    </div>
+    <div class="code-foot">
+      <span class="cf-item"><span class="cf-led" aria-hidden="true"></span>CLIFF 1.1</span>
+      <span class="cf-item">UTF-8</span>
+      <span class="cf-item cf-right">{t(locale, "hero-fixes")}</span>
+    </div>
+  </div>
+</div>

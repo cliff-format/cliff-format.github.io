@@ -1,0 +1,53 @@
+---
+import Icon from "../Icon.astro";
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const cards = [
+  { icon: "layers", id: "context" },
+  { icon: "lines", id: "line" },
+  { icon: "tag", id: "typed" },
+  { icon: "sparkle", id: "model" },
+  { icon: "database", id: "tokens" },
+  { icon: "code", id: "icu" },
+] as const;
+---
+
+<section class="section features" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{t(locale, "features-heading-1")}<br /><em>{t(locale, "features-heading-2")}</em></h2>
+      <p class="section-lede">{t(locale, "features-lede")}</p>
+    </div>
+    <div class="feature-grid">
+      {
+        cards.map((card) => (
+          <article class="feature pane">
+            <div class="feature-surface pane-surface">
+              <span class="f-icon" aria-hidden="true">
+                <Icon name={card.icon} />
+              </span>
+              <h3>{t(locale, `features-${card.id}-title`)}</h3>
+              {card.id === "typed" ? (
+                <p
+                  set:html={t(locale, "features-typed-body", {
+                    type: '<code lang="en">type</code>',
+                    status: '<code lang="en">status</code>',
+                  })}
+                />
+              ) : (
+                <p>{t(locale, `features-${card.id}-body`)}</p>
+              )}
+              <span class="f-tag">{t(locale, `features-${card.id}-tag`)}</span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

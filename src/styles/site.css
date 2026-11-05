@@ -1,0 +1,20 @@
+/* Site-level one-offs that do not belong in the system files.
+
+   The copy button swaps two stacked icons, so only the state rules live here. */
+
+.copy-done {
+  display: none;
+}
+[data-copy][data-copied="true"] .copy-idle {
+  display: none;
+}
+[data-copy][data-copied="true"] .copy-done {
+  display: block;
+}
+
+/* The announcement drops its link text on narrow screens; drop the arrow with it. */
+@media (max-width: 480px) {
+  .announce-arrow {
+    display: none;
+  }
+}

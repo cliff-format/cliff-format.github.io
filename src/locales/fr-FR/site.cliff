@@ -1,0 +1,534 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: fr-FR
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+target: "Accueil CLIFF"
+status: translated
+
+<nav-main>
+source: "主导航"
+target: "Navigation principale"
+status: translated
+
+<nav-format>
+source: "格式"
+target: "Format"
+status: translated
+
+<nav-features>
+source: "特性"
+target: "Fonctionnalités"
+status: translated
+
+<nav-lifecycle>
+source: "生命周期"
+target: "Cycle de vie"
+status: translated
+
+<nav-ecosystem>
+source: "生态"
+target: "Écosystème"
+status: translated
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+target: "Voir CLIFF sur GitHub"
+status: translated
+
+<nav-theme>
+source: "深色模式"
+target: "Mode sombre"
+status: translated
+
+<nav-skip>
+source: "跳到正文"
+target: "Aller au contenu"
+status: translated
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+target: "Changer de langue"
+status: translated
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+target: "CLIFF — le contexte, c'est le format"
+status: translated
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+target: "CLIFF est un format de fichier de travail pour la localisation, qui place le contexte en premier et s'écrit ligne par ligne sur tout le cycle de localisation. Lisible par les traducteurs, modifiable par les modèles, validé en une passe."
+status: translated
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+target: "Gardez le contexte."
+status: translated
+
+<cta-heading-2>
+source: "交付好翻译。"
+target: "Livrez de bonnes traductions."
+status: translated
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+target: "Lisez la spécification 1.1, choisissez une implémentation et passez un vrai fichier CLIFF au validateur."
+type: description
+status: translated
+
+<cta-action-spec>
+source: "阅读规范"
+target: "Lire la spécification"
+status: translated
+
+<cta-action-repos>
+source: "浏览仓库"
+target: "Voir les dépôts"
+status: translated
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+target: "Un format de travail,"
+status: translated
+
+<features-heading-2>
+source: "而非交换容器。"
+target: "pas un conteneur d'échange."
+status: translated
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+target: "Chaque décision ci-dessous s'appuie sur une mesure ou sur la spécification. Le format porte le contexte, la traduction n'a pas à deviner."
+type: description
+status: translated
+
+<features-context-title>
+source: "上下文随行"
+target: "Le contexte voyage"
+status: translated
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+target: "Le contexte du clan, du groupe et de l'entrée est hérité. Quand un traducteur ouvre une chaîne, il sait où elle vit, à qui elle parle et ce qu'il ne faut pas casser."
+type: description
+status: translated
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+target: "clan → groupe → entrée"
+status: translated
+
+<features-line-title>
+source: "一行一个结构"
+target: "Une ligne, une structure"
+status: translated
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+target: "Aucune balise ouvrante ou fermante sur plusieurs lignes. Insérer, déplacer ou supprimer une ligne ne laisse jamais de structure non fermée : les humains comme les modèles en dépendent."
+type: description
+status: translated
+
+<features-line-tag>
+source: "单遍解析"
+target: "analyse en une passe"
+status: translated
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+target: "Des types là où il en faut"
+status: translated
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+target: "{type} et {status} sont obligatoires ; des vocabulaires fermés transforment une saisie ambiguë en données qu'un validateur peut vérifier et qu'une chaîne d'outils peut croire."
+type: description
+status: translated
+
+<features-typed-tag>
+source: "封闭词表"
+target: "vocabulaires fermés"
+status: translated
+
+<features-model-title>
+source: "为模型编辑而生"
+target: "Pensé pour l'édition par modèle"
+status: translated
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+target: "Le mode tolérant répare les erreurs que les modèles font vraiment et rapporte chaque réparation au lieu de deviner. Le mode strict refuse toujours tout ce que la grammaire refuse."
+type: description
+status: translated
+
+<features-model-tag>
+source: "严格 + 宽容"
+target: "strict + tolérant"
+status: translated
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+target: "La facture de tokens la plus basse"
+status: translated
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+target: "À charge de contexte égale, les documents CLIFF sont les plus petits des dix formats testés. Les clés courtes et l'absence de balises de fermeture se cumulent à chaque appel."
+type: description
+status: translated
+
+<features-tokens-tag>
+source: "47,499 Token"
+target: "47 499 tokens"
+status: translated
+
+<features-icu-title>
+source: "ICU，原样保留"
+target: "ICU, préservé tel quel"
+status: translated
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+target: "MessageFormat 1 et 2 sont préservés mot pour mot dans les valeurs entre guillemets, le dialecte est détecté automatiquement, et les pluriels et sélections complexes cessent d'être des cas particuliers."
+type: description
+status: translated
+
+<features-icu-tag>
+source: "MF1 + MF2"
+target: "MF1 + MF2"
+status: translated
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+target: "Un format de fichier de travail pour la localisation, qui place le contexte en premier et s'écrit ligne par ligne."
+type: description
+status: translated
+
+<footer-nav>
+source: "页脚"
+target: "Pied de page"
+status: translated
+
+<footer-copy>
+source: "复制安装命令"
+target: "Copier la commande d'installation"
+status: translated
+
+<footer-resources>
+source: "资源"
+target: "Ressources"
+status: translated
+
+<footer-spec>
+source: "规范 1.1"
+target: "Spécification 1.1"
+status: translated
+
+<footer-abnf>
+source: "ABNF 语法"
+target: "Grammaire ABNF"
+status: translated
+
+<footer-style-guide>
+source: "风格指南"
+target: "Guide de style"
+status: translated
+
+<footer-rationale>
+source: "设计取舍"
+target: "Choix de conception"
+status: translated
+
+<footer-changelog>
+source: "更新日志"
+target: "Journal des modifications"
+status: translated
+
+<footer-build>
+source: "构建"
+target: "Développement"
+status: translated
+
+<footer-conformance>
+source: "一致性测试"
+target: "Tests de conformité"
+status: translated
+
+<footer-implementations>
+source: "实现登记"
+target: "Implémentations"
+status: translated
+
+<footer-project>
+source: "项目"
+target: "Projet"
+status: translated
+
+<footer-contributing>
+source: "贡献指南"
+target: "Contribuer"
+status: translated
+
+<footer-security>
+source: "安全策略"
+target: "Sécurité"
+status: translated
+
+<footer-license>
+source: "MIT 许可"
+target: "Licence MIT"
+status: translated
+
+<footer-community>
+source: "社区"
+target: "Communauté"
+status: translated
+
+<footer-discussions>
+source: "讨论"
+target: "Discussions"
+status: translated
+
+<footer-issues>
+source: "问题反馈"
+target: "Tickets"
+status: translated
+
+<footer-benchmark>
+source: "实测报告"
+target: "Rapport de mesures"
+status: translated
+
+<footer-legal>
+source: "MIT License © {year}"
+target: "MIT License © {year}"
+type: sentence
+status: translated
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+target: "Contributeurs CLIFF"
+status: translated
+
+<footer-spec-short>
+source: "规范"
+target: "Spécification"
+status: translated
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+target: "CLIFF 1.1 est disponible"
+status: translated
+
+<hero-announce-link>
+source: "阅读更新日志"
+target: "Lire le journal des modifications"
+status: translated
+
+<hero-title-1>
+source: "上下文，"
+target: "Le contexte,"
+status: translated
+
+<hero-title-2>
+source: "就是格式。"
+target: "c'est le format."
+status: translated
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+target: "Un fichier de travail ligne par ligne pour tout le cycle de localisation. Le contexte du clan, du groupe et de l'entrée voyage avec chaque chaîne : lisible par les traducteurs, modifiable par les modèles, validé en une passe."
+type: description
+status: translated
+
+<hero-action-spec>
+source: "阅读规范"
+target: "Lire la spécification"
+status: translated
+
+<hero-action-github>
+source: "在 GitHub 查看"
+target: "Voir sur GitHub"
+status: translated
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+target: "v1.1 stable"
+status: translated
+
+<hero-proof-license>
+source: "MIT 许可"
+target: "Licence MIT"
+status: translated
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+target: "Comparé à 10 formats"
+status: translated
+
+<hero-figure-context>
+source: "上下文保留"
+target: "contexte conservé"
+status: translated
+
+<hero-figure-tokens>
+source: "更少 Token"
+target: "moins de tokens"
+status: translated
+
+<hero-validated>
+source: "校验通过"
+target: "validé"
+status: translated
+
+<hero-fixes>
+source: "0 处修复"
+target: "0 correction"
+status: translated
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+target: "De l'extraction,"
+status: translated
+
+<lifecycle-heading-2>
+source: "到交付。"
+target: "à la livraison."
+status: translated
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+target: "Un fichier CLIFF n'est pas une passation unique. Le même fichier traverse extraction, traduction, relecture et livraison, et le contexte survit à chaque étape au lieu d'être reconstruit."
+type: description
+status: translated
+
+<lifecycle-extract-title>
+source: "提取"
+target: "Extraire"
+status: translated
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+target: "L'importateur replie les clés existantes en chemins de groupe et conserve l'orthographe d'origine comme clé de correspondance."
+type: description
+status: translated
+
+<lifecycle-translate-title>
+source: "翻译"
+target: "Traduire"
+status: translated
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+target: "Les traducteurs voient le contexte du clan, du groupe et de l'entrée dans un seul fichier ; les modèles reçoivent un document sûr et économe en tokens."
+type: description
+status: translated
+
+<lifecycle-review-title>
+source: "审校"
+target: "Relire"
+status: translated
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+target: "Les champs obligatoires et les vocabulaires fermés rendent la relecture mécaniquement vérifiable. Chaque réparation est rapportée et rien n'est inventé en silence."
+type: description
+status: translated
+
+<lifecycle-deliver-title>
+source: "交付"
+target: "Livrer"
+status: translated
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+target: "Exportez vers un runtime, un manifeste de moteur ou une mémoire de traduction sans reconstruire le contexte d'origine."
+type: description
+status: translated
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+target: "Résultats mesurés"
+status: translated
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+target: "cliff-test : 960 appels de traduction, 16 documents"
+type: description
+status: translated
+
+<metrics-token-key>
+source: "Token"
+target: "Tokens"
+status: translated
+
+<metrics-token-detail>
+source: "十种格式中最低"
+target: "Le plus bas des dix formats"
+type: description
+status: translated
+
+<metrics-context-key>
+source: "上下文"
+target: "Contexte"
+status: translated
+
+<metrics-context-detail>
+source: "往返后完整保留"
+target: "Conservé après l'aller-retour"
+type: description
+status: translated
+
+<metrics-fixes-key>
+source: "修复"
+target: "Corrections"
+status: translated
+
+<metrics-fixes-detail>
+source: "每次往返"
+target: "Par aller-retour"
+type: description
+status: translated
+
+<metrics-rewrite-key>
+source: "单次重写"
+target: "Réécriture unique"
+status: translated
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+target: "Taux de réussite"
+type: description
+status: translated

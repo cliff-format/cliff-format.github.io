@@ -1,0 +1,260 @@
+/* Graphite Glass: Material 3 color roles and the glass material.
+
+   The canvas stays neutral and one CLIFF green carries every accent. This file
+   sets color and surface only — structure lives in base.css and type in
+   typography.css. Roles are the same names across both themes.
+
+   The glass is CSS/SVG: each pane carries a displacement filter that bends the
+   real backdrop at the edge, plus a neutral tint. Tokens
+   below describe the scene and the tint; the lens geometry lives in
+   src/scripts/glass.ts. */
+
+html[data-theme="dark"] {
+  --m3-primary: #00c853;
+  --m3-on-primary: #03140a;
+  --m3-primary-hover: #2ce87c;
+  --m3-primary-container: rgba(0, 200, 83, 0.1);
+  --m3-on-primary-container: #73f0a4;
+  --m3-surface: #0e0f10;
+  --m3-surface-dim: #0a0b0c;
+  --m3-surface-container-lowest: #090a0b;
+  --m3-surface-container-low: #141617;
+  --m3-surface-container: #1a1c1d;
+  --m3-surface-container-high: #1f2122;
+  --m3-surface-container-highest: #242627;
+  --m3-on-surface: #f2f4f2;
+  --m3-on-surface-variant: #bcc1be;
+  --m3-on-surface-muted: #8f9692;
+  --m3-outline: #282b2c;
+  --m3-outline-variant: #383c3d;
+  --m3-scrim: rgba(0, 0, 0, 0.62);
+
+  --canvas-top: #131516;
+  --canvas-mid: #0e0f10;
+  --canvas-bottom: #0a0b0c;
+  --glow-a: rgba(0, 200, 83, 0.16);
+  --glow-b: rgba(0, 200, 83, 0.08);
+  --grain: 0.03;
+
+  /* The scene behind the glass: the dot field is the carrier for the lens. */
+  --field-text: rgba(255, 255, 255, 0.06);
+  --glass-sheen: rgba(255, 255, 255, 0.08);
+  --glass-shade: rgba(0, 0, 0, 0.08);
+
+  /* Fallback glass: used before JS and where the data-URI filter cannot run. */
+  --glass-low: rgba(255, 255, 255, 0.05);
+  --glass-high: rgba(255, 255, 255, 0.1);
+  --glass-line: rgba(255, 255, 255, 0.11);
+  --glass-pane-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.028));
+  --glass-pane-tint: rgba(30, 35, 36, 0.3);
+  --glass-head-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.04));
+  --glass-head-tint: rgba(28, 33, 34, 0.38);
+  --glass-code-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  --glass-code-tint: rgba(14, 18, 19, 0.3);
+  --glass-cta-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  --glass-cta-tint: rgba(28, 33, 34, 0.34);
+  --glass-menu-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+  --glass-menu-tint: rgba(10, 12, 13, 0.94);
+  --glass-rule: rgba(255, 255, 255, 0.09);
+
+  --glass-top-light: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 1px 0 var(--glass-top-light) inset, 0 28px 64px -34px rgba(0, 0, 0, 0.92), 0 2px 6px rgba(0, 0, 0, 0.32);
+  --head-shadow: 0 1px 0 var(--glass-top-light) inset, 0 20px 50px -28px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  --btn-ghost-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  --btn-ghost-tint: rgba(20, 24, 25, 0.36);
+
+  --bg: var(--m3-surface);
+  --text: var(--m3-on-surface);
+  --text-2: var(--m3-on-surface-variant);
+  --muted: var(--m3-on-surface-muted);
+  --line: var(--m3-outline);
+  --line-strong: var(--m3-outline-variant);
+  --brand: var(--m3-primary);
+  --brand-bright: var(--m3-primary-hover);
+  --on-brand: var(--m3-on-primary);
+  --accent-text: var(--m3-on-primary-container);
+  --focus: var(--m3-on-primary-container);
+
+  --code-line: #2a2e2f;
+  --code-text: #d9e5dc;
+  --code-key: #7fe6a8;
+  --code-punct: #718078;
+  --code-lit: #eef6f0;
+  --code-str: #c7d7cc;
+  --code-dir: #73f0a4;
+  --code-section: #85e6aa;
+  --code-id: #ffffff;
+  --code-final: #5be88c;
+  --code-focus: rgba(0, 200, 83, 0.08);
+}
+
+html[data-theme="light"] {
+  --m3-primary: #00a854;
+  --m3-on-primary: #03210f;
+  --m3-primary-hover: #12c868;
+  --m3-primary-container: rgba(0, 168, 84, 0.1);
+  --m3-on-primary-container: #006b37;
+  --m3-surface: #f3f4f1;
+  --m3-surface-dim: #eceeea;
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #fbfcfa;
+  --m3-surface-container: #f7f8f6;
+  --m3-surface-container-high: #eff1ee;
+  --m3-surface-container-highest: #e9ece8;
+  --m3-on-surface: #151816;
+  --m3-on-surface-variant: #4d5550;
+  --m3-on-surface-muted: #667069;
+  --m3-outline: #dfe3df;
+  --m3-outline-variant: #cbd0cb;
+  --m3-scrim: rgba(20, 26, 23, 0.3);
+
+  --canvas-top: #fafaf8;
+  --canvas-mid: #f3f4f1;
+  --canvas-bottom: #eef0ec;
+  --glow-a: rgba(0, 168, 84, 0.1);
+  --glow-b: rgba(0, 168, 84, 0.06);
+  --grain: 0.02;
+
+  --field-text: rgba(20, 28, 23, 0.05);
+  --glass-sheen: rgba(255, 255, 255, 0.5);
+  --glass-shade: rgba(24, 32, 27, 0.03);
+
+  --glass-low: rgba(255, 255, 255, 0.5);
+  --glass-high: rgba(255, 255, 255, 0.8);
+  --glass-line: rgba(24, 32, 27, 0.1);
+  --glass-pane-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.24));
+  --glass-pane-tint: rgba(255, 255, 255, 0.08);
+  --glass-head-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.4));
+  --glass-head-tint: rgba(255, 255, 255, 0.1);
+  --glass-code-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5));
+  --glass-code-tint: rgba(255, 255, 255, 0.1);
+  --glass-cta-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.3));
+  --glass-cta-tint: rgba(255, 255, 255, 0.08);
+  --glass-menu-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+  --glass-menu-tint: rgba(252, 253, 252, 0.94);
+  --glass-rule: rgba(24, 32, 27, 0.1);
+
+  --glass-top-light: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 1px 0 var(--glass-top-light) inset, 0 30px 60px -36px rgba(24, 34, 29, 0.45), 0 2px 6px rgba(24, 34, 29, 0.06);
+  --head-shadow: 0 1px 0 var(--glass-top-light) inset, 0 20px 46px -26px rgba(24, 34, 29, 0.32), 0 2px 6px rgba(24, 34, 29, 0.06);
+
+  --btn-ghost-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56));
+  --btn-ghost-tint: rgba(255, 255, 255, 0.26);
+
+  --bg: var(--m3-surface);
+  --text: var(--m3-on-surface);
+  --text-2: var(--m3-on-surface-variant);
+  --muted: var(--m3-on-surface-muted);
+  --line: var(--m3-outline);
+  --line-strong: var(--m3-outline-variant);
+  --brand: var(--m3-primary);
+  --brand-bright: var(--m3-primary-hover);
+  --on-brand: var(--m3-on-primary);
+  --accent-text: var(--m3-on-primary-container);
+  --focus: var(--m3-on-primary-container);
+
+  --code-line: #e3e7e2;
+  --code-text: #252a27;
+  --code-key: #006b37;
+  --code-punct: #99a19c;
+  --code-lit: #101312;
+  --code-str: #4c554f;
+  --code-dir: #006b37;
+  --code-section: #006b37;
+  --code-id: #101312;
+  --code-final: #006b37;
+  --code-focus: rgba(0, 168, 84, 0.08);
+}
+
+/* Scene: a graphite canvas lit by one green source behind the specimen and one
+   behind the call to action. The dots and rulings give the glass something to
+   bend. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(48rem 32rem at 78% 6%, var(--glow-a), transparent 68%),
+    radial-gradient(56rem 38rem at 50% 106%, var(--glow-b), transparent 70%),
+    linear-gradient(180deg, var(--canvas-top) 0%, var(--canvas-mid) 55%, var(--canvas-bottom) 100%);
+}
+
+.bd {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+.bd-text {
+  position: absolute;
+  inset: -70% -15%;
+  bottom: auto;
+  height: auto;
+  display: grid;
+  font-size: 1.375rem;
+  grid-auto-rows: 1.673em;
+  align-content: start;
+  row-gap: 0.5rem;
+  padding-block: clamp(2rem, 6vh, 4rem);
+  overflow: hidden;
+  color: var(--field-text);
+  direction: ltr;
+  /* The SVG's text weave is rotated -20°; the rows inherit that slant. */
+  transform: rotate(-20deg);
+  transform-origin: 50% 50%;
+}
+.text-row {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+}
+.text-track {
+  display: flex;
+  width: max-content;
+  animation: field-left var(--dur, 80s) linear infinite;
+}
+.text-row:nth-child(even) .text-track {
+  animation-name: field-right;
+}
+.text-copy {
+  display: block;
+  flex: none;
+  font-family: "Field Sans", sans-serif;
+  /* One merged Noto Sans family covers every field glyph; its 400 cut is
+     synthesized to 600. The fixed 1em advances keep the 1.636em grid. */
+  font-weight: 600;
+  font-synthesis: weight;
+  font-size: 1.375rem;
+  line-height: 1.15;
+  letter-spacing: 0.636em;
+  white-space: nowrap;
+  /* Fixed advance widths only work when ligatures cannot merge two cells. */
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+@keyframes field-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes field-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.bd-grain {
+  display: block;
+  opacity: var(--grain);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}

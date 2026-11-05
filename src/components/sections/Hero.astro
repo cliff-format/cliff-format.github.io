@@ -1,0 +1,61 @@
+---
+import CodeCard from "../CodeCard.astro";
+import Icon from "../Icon.astro";
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<section class="hero wrap" id="format">
+  <div class="hero-copy">
+    <a
+      class="announce"
+      href="https://github.com/cliff-format/cliff/blob/main/CHANGELOG.md"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <span class="announce-dot" aria-hidden="true"></span>
+      <span>{t(locale, "hero-announce")}</span>
+      <span class="announce-sep" aria-hidden="true"></span>
+      <span class="announce-link">{t(locale, "hero-announce-link")}</span>
+      <Icon name="arrowRight" class="ico announce-arrow" />
+    </a>
+    <h1 class="hero-title">
+      <span>{t(locale, "hero-title-1")}</span>
+      <span class="accent">{t(locale, "hero-title-2")}</span>
+    </h1>
+    <p class="lede">{t(locale, "hero-lede")}</p>
+    <div class="actions">
+      <a
+        class="btn btn-primary"
+        href="https://github.com/cliff-format/cliff/blob/main/spec/cliff-1.1.0.md"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <span class="btn__label">{t(locale, "hero-action-spec")}</span>
+        <Icon name="arrowRight" />
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/cliff-format">
+        <Icon name="github" />
+        <span class="btn__label">{t(locale, "hero-action-github")}</span>
+      </a>
+    </div>
+    <ul class="proof">
+      <li><span class="proof-dot" aria-hidden="true"></span>{t(locale, "hero-proof-version")}</li>
+      <li>{t(locale, "hero-proof-license")}</li>
+      <li>{t(locale, "hero-proof-tested")}</li>
+    </ul>
+  </div>
+
+  <figure class="hero-figure">
+    <CodeCard locale={locale} />
+    <figcaption class="figure-note">
+      <span><b>100%</b> {t(locale, "hero-figure-context")}</span>
+      <span><b>11.1%</b> {t(locale, "hero-figure-tokens")}</span>
+    </figcaption>
+  </figure>
+</section>

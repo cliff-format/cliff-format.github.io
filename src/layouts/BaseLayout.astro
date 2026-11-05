@@ -1,0 +1,86 @@
+---
+import "../styles/app.css";
+import BackgroundText from "../components/BackgroundText.astro";
+import { DEFAULT_LOCALE, LOCALES, localeDir, localePath, t, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const title = t(locale, "meta-title");
+const description = t(locale, "meta-description");
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const dir = localeDir(locale);
+// Korean and Arabic load their own script subset; other locales never fetch it.
+const scriptFont = locale === "ko-KR" ? "/fonts/NotoSansKR-subset.woff2" : locale === "ar" ? "/fonts/NotoSansArabic-subset.woff2" : null;
+---
+
+<!doctype html>
+<html lang={locale} dir={dir} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    {
+      LOCALES.map((code) => (
+        <link rel="alternate" hreflang={code} href={new URL(localePath(code), Astro.site).href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE), Astro.site).href} />
+    <meta name="theme-color" content="#0e0f10" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:locale" content={locale.replace("-", "_")} />
+    {
+      LOCALES.filter((code) => code !== locale).map((code) => (
+        <meta property="og:locale:alternate" content={code.replace("-", "_")} />
+      ))
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/SmileySans-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMono-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/FieldSans.woff2" as="font" type="font/woff2" crossorigin />
+    {scriptFont && <link rel="preload" href={scriptFont} as="font" type="font/woff2" crossorigin />}
+    <script is:inline>
+      // Resolve the theme before the first paint so the page never flashes.
+      (() => {
+        const root = document.documentElement;
+        const asked = new URLSearchParams(location.search).get("t");
+        let saved = null;
+        try {
+          saved = JSON.parse(localStorage.getItem("cliff-theme") || "null");
+        } catch {}
+        const stored = saved && typeof saved === "object" ? saved.theme : saved;
+        root.dataset.theme =
+          asked === "light" || asked === "dark"
+            ? asked
+            : stored === "light" || stored === "dark"
+              ? stored
+              : "dark";
+        if (new URLSearchParams(location.search).get("static") === "1") {
+          root.dataset.static = "1";
+        }
+        root.classList.add("js");
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(locale, "nav-skip")}</a>
+    <div class="backdrop" aria-hidden="true">
+      <BackgroundText />
+      <div class="bd bd-grain"></div>
+    </div>
+    <div class="site">
+      <slot />
+    </div>
+    <script>
+      import "../scripts/app";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,438 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: zh-CN
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+status: initial
+
+<nav-main>
+source: "主导航"
+status: initial
+
+<nav-format>
+source: "格式"
+status: initial
+
+<nav-features>
+source: "特性"
+status: initial
+
+<nav-lifecycle>
+source: "生命周期"
+status: initial
+
+<nav-ecosystem>
+source: "生态"
+status: initial
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+status: initial
+
+<nav-theme>
+source: "深色模式"
+status: initial
+
+<nav-skip>
+source: "跳到正文"
+status: initial
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+status: initial
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+status: initial
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+status: initial
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+status: initial
+
+<cta-heading-2>
+source: "交付好翻译。"
+status: initial
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+type: description
+status: initial
+
+<cta-action-spec>
+source: "阅读规范"
+status: initial
+
+<cta-action-repos>
+source: "浏览仓库"
+status: initial
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+status: initial
+
+<features-heading-2>
+source: "而非交换容器。"
+status: initial
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+type: description
+status: initial
+
+<features-context-title>
+source: "上下文随行"
+status: initial
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+type: description
+status: initial
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+status: initial
+
+<features-line-title>
+source: "一行一个结构"
+status: initial
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+type: description
+status: initial
+
+<features-line-tag>
+source: "单遍解析"
+status: initial
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+status: initial
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+type: description
+status: initial
+
+<features-typed-tag>
+source: "封闭词表"
+status: initial
+
+<features-model-title>
+source: "为模型编辑而生"
+status: initial
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+type: description
+status: initial
+
+<features-model-tag>
+source: "严格 + 宽容"
+status: initial
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+status: initial
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+type: description
+status: initial
+
+<features-tokens-tag>
+source: "47,499 Token"
+status: initial
+
+<features-icu-title>
+source: "ICU，原样保留"
+status: initial
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+type: description
+status: initial
+
+<features-icu-tag>
+source: "MF1 + MF2"
+status: initial
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+type: description
+status: initial
+
+<footer-nav>
+source: "页脚"
+status: initial
+
+<footer-copy>
+source: "复制安装命令"
+status: initial
+
+<footer-resources>
+source: "资源"
+status: initial
+
+<footer-spec>
+source: "规范 1.1"
+status: initial
+
+<footer-abnf>
+source: "ABNF 语法"
+status: initial
+
+<footer-style-guide>
+source: "风格指南"
+status: initial
+
+<footer-rationale>
+source: "设计取舍"
+status: initial
+
+<footer-changelog>
+source: "更新日志"
+status: initial
+
+<footer-build>
+source: "构建"
+status: initial
+
+<footer-conformance>
+source: "一致性测试"
+status: initial
+
+<footer-implementations>
+source: "实现登记"
+status: initial
+
+<footer-project>
+source: "项目"
+status: initial
+
+<footer-contributing>
+source: "贡献指南"
+status: initial
+
+<footer-security>
+source: "安全策略"
+status: initial
+
+<footer-license>
+source: "MIT 许可"
+status: initial
+
+<footer-community>
+source: "社区"
+status: initial
+
+<footer-discussions>
+source: "讨论"
+status: initial
+
+<footer-issues>
+source: "问题反馈"
+status: initial
+
+<footer-benchmark>
+source: "实测报告"
+status: initial
+
+<footer-legal>
+source: "MIT License © {year}"
+type: sentence
+status: initial
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+status: initial
+
+<footer-spec-short>
+source: "规范"
+status: initial
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+status: initial
+
+<hero-announce-link>
+source: "阅读更新日志"
+status: initial
+
+<hero-title-1>
+source: "上下文，"
+status: initial
+
+<hero-title-2>
+source: "就是格式。"
+status: initial
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+type: description
+status: initial
+
+<hero-action-spec>
+source: "阅读规范"
+status: initial
+
+<hero-action-github>
+source: "在 GitHub 查看"
+status: initial
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+status: initial
+
+<hero-proof-license>
+source: "MIT 许可"
+status: initial
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+status: initial
+
+<hero-figure-context>
+source: "上下文保留"
+status: initial
+
+<hero-figure-tokens>
+source: "更少 Token"
+status: initial
+
+<hero-validated>
+source: "校验通过"
+status: initial
+
+<hero-fixes>
+source: "0 处修复"
+status: initial
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+status: initial
+
+<lifecycle-heading-2>
+source: "到交付。"
+status: initial
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+type: description
+status: initial
+
+<lifecycle-extract-title>
+source: "提取"
+status: initial
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+type: description
+status: initial
+
+<lifecycle-translate-title>
+source: "翻译"
+status: initial
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+type: description
+status: initial
+
+<lifecycle-review-title>
+source: "审校"
+status: initial
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+type: description
+status: initial
+
+<lifecycle-deliver-title>
+source: "交付"
+status: initial
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+type: description
+status: initial
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+status: initial
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+type: description
+status: initial
+
+<metrics-token-key>
+source: "Token"
+status: initial
+
+<metrics-token-detail>
+source: "十种格式中最低"
+type: description
+status: initial
+
+<metrics-context-key>
+source: "上下文"
+status: initial
+
+<metrics-context-detail>
+source: "往返后完整保留"
+type: description
+status: initial
+
+<metrics-fixes-key>
+source: "修复"
+status: initial
+
+<metrics-fixes-detail>
+source: "每次往返"
+type: description
+status: initial
+
+<metrics-rewrite-key>
+source: "单次重写"
+status: initial
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+type: description
+status: initial

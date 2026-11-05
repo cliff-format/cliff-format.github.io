@@ -1,0 +1,44 @@
+---
+// Random glyphs from the ten site languages form the decorative text weave.
+// The field is rotated -20deg in graphite.css and the rows alternate direction.
+const GLYPHS = [
+  ..."ŞÜÆĘØŒĞĄÅÑÇß",
+  ..."シコあカナタハマヤラワ国日本語文字翻訳",
+  ..."번국한글역문자언어",
+  ..."ЩГДЖЯФЦЮБЭЫ",
+  ..."家族分組條目上下文格式境文化譯",
+  ..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+];
+
+function seeded(seed: number): () => number {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const random = seeded(0xc11ff);
+const rows = Array.from({ length: 80 }, (_, row) => {
+  const length = 44 + (row % 4) * 6;
+  const text = Array.from({ length }, () => GLYPHS[Math.floor(random() * GLYPHS.length)]).join("");
+  // Four repeats keep one copy wider than the 4K field; the track renders two
+  // copies so the -50% loop is seamless. The fixed-cell font gives every glyph
+  // the same advance, so plain text keeps the 1.636em grid without spans.
+  return text.repeat(4);
+});
+---
+
+<div class="bd-text" aria-hidden="true" dir="ltr">
+  {
+    rows.map((text, index) => (
+      <div class="text-row" style={`--dur:${260 + index * 10}s`}>
+        <div class="text-track">
+          <span class="text-copy">{text}</span>
+          <span class="text-copy" aria-hidden="true">{text}</span>
+        </div>
+      </div>
+    ))
+  }
+</div>

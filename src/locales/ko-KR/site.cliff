@@ -1,0 +1,534 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: ko-KR
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+target: "CLIFF 홈"
+status: translated
+
+<nav-main>
+source: "主导航"
+target: "주요 탐색"
+status: translated
+
+<nav-format>
+source: "格式"
+target: "형식"
+status: translated
+
+<nav-features>
+source: "特性"
+target: "특징"
+status: translated
+
+<nav-lifecycle>
+source: "生命周期"
+target: "수명 주기"
+status: translated
+
+<nav-ecosystem>
+source: "生态"
+target: "생태계"
+status: translated
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+target: "GitHub에서 CLIFF 보기"
+status: translated
+
+<nav-theme>
+source: "深色模式"
+target: "다크 모드"
+status: translated
+
+<nav-skip>
+source: "跳到正文"
+target: "본문으로 건너뛰기"
+status: translated
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+target: "언어 변경"
+status: translated
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+target: "CLIFF — 문맥이 곧 형식"
+status: translated
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+target: "CLIFF는 문맥을 우선하고 한 줄씩 작성하는 로컬라이제이션 작업 파일 형식으로, 로컬라이제이션 수명 주기 전체를 다룹니다. 번역자가 읽고, 모델이 고치고, 검증은 한 번에 통과합니다."
+status: translated
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+target: "문맥을 남기세요."
+status: translated
+
+<cta-heading-2>
+source: "交付好翻译。"
+target: "좋은 번역을 전하세요."
+status: translated
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+target: "1.1 명세를 읽고 구현 하나를 골라 실제 CLIFF 파일을 검증기에 통과시키세요."
+type: description
+status: translated
+
+<cta-action-spec>
+source: "阅读规范"
+target: "명세 읽기"
+status: translated
+
+<cta-action-repos>
+source: "浏览仓库"
+target: "저장소 보기"
+status: translated
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+target: "작업 형식이며,"
+status: translated
+
+<features-heading-2>
+source: "而非交换容器。"
+target: "교환용 그릇이 아닙니다."
+status: translated
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+target: "아래의 모든 결정은 측정이나 명세에 근거합니다. 형식 자체가 문맥을 지니므로 번역이 추측할 필요가 없습니다."
+type: description
+status: translated
+
+<features-context-title>
+source: "上下文随行"
+target: "문맥이 따라옵니다"
+status: translated
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+target: "클랜, 그룹, 항목의 문맥이 상속됩니다. 번역자가 문자열을 열면 그것이 어디에 있고 누구에게 말하며 무엇을 깨뜨리면 안 되는지 압니다."
+type: description
+status: translated
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+target: "클랜 → 그룹 → 항목"
+status: translated
+
+<features-line-title>
+source: "一行一个结构"
+target: "한 줄에 하나의 구조"
+status: translated
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+target: "여러 줄에 걸친 열고 닫는 태그가 없습니다. 줄을 넣거나 옮기거나 지워도 닫히지 않은 구조가 남지 않습니다. 사람과 모델 모두 이 점에 기댑니다."
+type: description
+status: translated
+
+<features-line-tag>
+source: "单遍解析"
+target: "단일 패스 파싱"
+status: translated
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+target: "형식이 있어야 할 곳에 형식이"
+status: translated
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+target: "{type}와 {status}는 필수이며, 닫힌 어휘가 모호한 입력을 검증기가 확인하고 도구 체인이 신뢰할 수 있는 데이터로 바꿉니다."
+type: description
+status: translated
+
+<features-typed-tag>
+source: "封闭词表"
+target: "닫힌 어휘"
+status: translated
+
+<features-model-title>
+source: "为模型编辑而生"
+target: "모델 편집을 위해 설계"
+status: translated
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+target: "관대 모드는 모델이 실제로 저지르는 실수를 고치고 추측 대신 고친 곳을 하나씩 보고합니다. 엄격 모드는 문법이 거부하는 것은 여전히 거부합니다."
+type: description
+status: translated
+
+<features-model-tag>
+source: "严格 + 宽容"
+target: "엄격 + 관대"
+status: translated
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+target: "가장 낮은 토큰 청구서"
+status: translated
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+target: "같은 문맥 부하에서 CLIFF 문서는 시험한 열 가지 형식 가운데 가장 작습니다. 짧은 키 이름과 닫는 태그 없음이 호출마다 누적됩니다."
+type: description
+status: translated
+
+<features-tokens-tag>
+source: "47,499 Token"
+target: "47,499 토큰"
+status: translated
+
+<features-icu-title>
+source: "ICU，原样保留"
+target: "ICU를 그대로 보존"
+status: translated
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+target: "MessageFormat 1과 2는 따옴표 값 안에서 그대로 보존되고, 방언은 자동으로 식별되며, 복잡한 복수형과 선택이 더 이상 예외가 아닙니다."
+type: description
+status: translated
+
+<features-icu-tag>
+source: "MF1 + MF2"
+target: "MF1 + MF2"
+status: translated
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+target: "문맥을 우선하고 한 줄씩 작성하는 로컬라이제이션 작업 파일 형식."
+type: description
+status: translated
+
+<footer-nav>
+source: "页脚"
+target: "바닥글"
+status: translated
+
+<footer-copy>
+source: "复制安装命令"
+target: "설치 명령 복사"
+status: translated
+
+<footer-resources>
+source: "资源"
+target: "자료"
+status: translated
+
+<footer-spec>
+source: "规范 1.1"
+target: "명세 1.1"
+status: translated
+
+<footer-abnf>
+source: "ABNF 语法"
+target: "ABNF 문법"
+status: translated
+
+<footer-style-guide>
+source: "风格指南"
+target: "스타일 가이드"
+status: translated
+
+<footer-rationale>
+source: "设计取舍"
+target: "설계 근거"
+status: translated
+
+<footer-changelog>
+source: "更新日志"
+target: "변경 기록"
+status: translated
+
+<footer-build>
+source: "构建"
+target: "개발"
+status: translated
+
+<footer-conformance>
+source: "一致性测试"
+target: "적합성 시험"
+status: translated
+
+<footer-implementations>
+source: "实现登记"
+target: "구현 목록"
+status: translated
+
+<footer-project>
+source: "项目"
+target: "프로젝트"
+status: translated
+
+<footer-contributing>
+source: "贡献指南"
+target: "기여하기"
+status: translated
+
+<footer-security>
+source: "安全策略"
+target: "보안"
+status: translated
+
+<footer-license>
+source: "MIT 许可"
+target: "MIT 라이선스"
+status: translated
+
+<footer-community>
+source: "社区"
+target: "커뮤니티"
+status: translated
+
+<footer-discussions>
+source: "讨论"
+target: "토론"
+status: translated
+
+<footer-issues>
+source: "问题反馈"
+target: "이슈"
+status: translated
+
+<footer-benchmark>
+source: "实测报告"
+target: "측정 보고서"
+status: translated
+
+<footer-legal>
+source: "MIT License © {year}"
+target: "MIT License © {year}"
+type: sentence
+status: translated
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+target: "CLIFF 기여자"
+status: translated
+
+<footer-spec-short>
+source: "规范"
+target: "명세"
+status: translated
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+target: "CLIFF 1.1 공개"
+status: translated
+
+<hero-announce-link>
+source: "阅读更新日志"
+target: "변경 기록 읽기"
+status: translated
+
+<hero-title-1>
+source: "上下文，"
+target: "문맥이,"
+status: translated
+
+<hero-title-2>
+source: "就是格式。"
+target: "형식입니다."
+status: translated
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+target: "로컬라이제이션 수명 주기 전체를 위한 한 줄짜리 작업 파일. 클랜, 그룹, 항목의 문맥이 문자열과 함께 흐릅니다. 번역자가 읽고, 모델이 고치고, 검증은 한 번에 통과합니다."
+type: description
+status: translated
+
+<hero-action-spec>
+source: "阅读规范"
+target: "명세 읽기"
+status: translated
+
+<hero-action-github>
+source: "在 GitHub 查看"
+target: "GitHub에서 보기"
+status: translated
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+target: "v1.1 안정판"
+status: translated
+
+<hero-proof-license>
+source: "MIT 许可"
+target: "MIT 라이선스"
+status: translated
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+target: "10가지 형식과 함께 측정"
+status: translated
+
+<hero-figure-context>
+source: "上下文保留"
+target: "문맥 보존"
+status: translated
+
+<hero-figure-tokens>
+source: "更少 Token"
+target: "토큰 절감"
+status: translated
+
+<hero-validated>
+source: "校验通过"
+target: "검증 통과"
+status: translated
+
+<hero-fixes>
+source: "0 处修复"
+target: "수정 0건"
+status: translated
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+target: "추출에서,"
+status: translated
+
+<lifecycle-heading-2>
+source: "到交付。"
+target: "전달까지."
+status: translated
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+target: "CLIFF는 한 번 쓰고 넘기는 인수물이 아닙니다. 같은 파일이 추출, 번역, 검토, 전달을 거치며 문맥은 매 단계에서 다시 만들어지는 대신 남습니다."
+type: description
+status: translated
+
+<lifecycle-extract-title>
+source: "提取"
+target: "추출"
+status: translated
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+target: "가져오기는 기존 키를 그룹 경로로 접고 원래 표기를 일치 키로 남깁니다."
+type: description
+status: translated
+
+<lifecycle-translate-title>
+source: "翻译"
+target: "번역"
+status: translated
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+target: "번역자는 한 파일에서 클랜, 그룹, 항목 문맥을 봅니다. 모델은 안전하고 토큰이 적은 문서를 받습니다."
+type: description
+status: translated
+
+<lifecycle-review-title>
+source: "审校"
+target: "검토"
+status: translated
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+target: "필수 필드와 닫힌 어휘 덕분에 검토는 기계적으로 확인할 수 있습니다. 모든 수정이 보고되며 조용히 지어내지 않습니다."
+type: description
+status: translated
+
+<lifecycle-deliver-title>
+source: "交付"
+target: "전달"
+status: translated
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+target: "런타임, 엔진 매니페스트, 번역 메모리로 내보낼 때 처음의 문맥을 다시 만들 필요가 없습니다."
+type: description
+status: translated
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+target: "측정 결과"
+status: translated
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+target: "cliff-test: 번역 호출 960회, 문서 16개"
+type: description
+status: translated
+
+<metrics-token-key>
+source: "Token"
+target: "토큰"
+status: translated
+
+<metrics-token-detail>
+source: "十种格式中最低"
+target: "열 가지 형식 중 최소"
+type: description
+status: translated
+
+<metrics-context-key>
+source: "上下文"
+target: "문맥"
+status: translated
+
+<metrics-context-detail>
+source: "往返后完整保留"
+target: "왕복 후에도 그대로"
+type: description
+status: translated
+
+<metrics-fixes-key>
+source: "修复"
+target: "수정"
+status: translated
+
+<metrics-fixes-detail>
+source: "每次往返"
+target: "왕복당"
+type: description
+status: translated
+
+<metrics-rewrite-key>
+source: "单次重写"
+target: "한 번 고쳐 쓰기"
+status: translated
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+target: "고쳐 쓰기 성공률"
+type: description
+status: translated

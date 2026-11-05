@@ -1,0 +1,83 @@
+---
+import Icon from "./Icon.astro";
+import { LOCALES, LOCALE_LABELS, localePath, t, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const home = localePath(locale);
+---
+
+<header class="site-head">
+  <div class="wrap">
+    <div class="head-pane pane">
+      <div class="head-surface pane-surface">
+        <div class="head-row">
+          <a class="brand" href={home} aria-label={t(locale, "nav-brand-home")}>
+            <img class="brand-light" src="/logos/cliff-wordmark-light.svg" alt="CLIFF" height="24" />
+            <img class="brand-dark" src="/logos/cliff-wordmark-dark.svg" alt="CLIFF" height="24" />
+          </a>
+          <nav class="site-nav" aria-label={t(locale, "nav-main")}>
+            <a href={`${home}#format`}>{t(locale, "nav-format")}</a>
+            <a href={`${home}#why`}>{t(locale, "nav-features")}</a>
+            <a href={`${home}#lifecycle`}>{t(locale, "nav-lifecycle")}</a>
+            <a href="https://github.com/cliff-format" target="_blank" rel="noreferrer">{t(locale, "nav-ecosystem")}</a>
+          </nav>
+          <div class="head-end">
+            <button
+              class="lang-btn"
+              type="button"
+              popovertarget="lang-menu"
+              aria-label={t(locale, "lang-switch")}
+            >
+              <span lang={locale}>{LOCALE_LABELS[locale]}</span>
+            </button>
+            <a class="gh-link" href="https://github.com/cliff-format" aria-label={t(locale, "nav-github")}>
+              <Icon name="github" />
+              <span>GitHub</span>
+            </a>
+            <button
+              class="theme-switch"
+              type="button"
+              role="switch"
+              aria-checked="false"
+              aria-label={t(locale, "nav-theme")}
+              data-theme-toggle
+            >
+              <span class="ts-icon ts-sun" aria-hidden="true"><Icon name="sun" /></span>
+              <span class="ts-icon ts-moon" aria-hidden="true"><Icon name="moon" /></span>
+              <span class="ts-knob" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top layer: the menu is a glass pane of its own, so neither the header's
+       clip path nor its stacking context can cut it off. -->
+  <div id="lang-menu" class="lang-menu" popover>
+    <div class="lang-pane pane">
+      <div class="lang-surface pane-surface">
+        <ul class="lang-list">
+          {
+            LOCALES.map((code) => (
+              <li>
+                <a
+                  href={localePath(code)}
+                  hreflang={code}
+                  lang={code}
+                  aria-current={code === locale ? "true" : undefined}
+                >
+                  {LOCALE_LABELS[code]}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

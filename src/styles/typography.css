@@ -1,0 +1,146 @@
+/* Type system: one family, one weight, one scale.
+
+   Family   Smiley Sans (得意黑) for all prose and UI; JetBrains Mono only for
+            file content and the install command, where column alignment matters.
+   Weight   400 everywhere. The family ships a single weight, so hierarchy comes
+            from size and color. font-synthesis: none blocks fake bold.
+   Scale    display 40→64 · heading 30→40 · stat 32→40 · title 20 · lead 18 ·
+            body 16 · ui 14 · meta 13 (px at default settings).
+   Rhythm   display 1.06 · heading 1.18 · title 1.4 · lead 1.7 · body 1.75 · ui 1.5.
+
+   This is the only file that sets font-family, font-size, font-weight,
+   line-height, or letter-spacing. base.css lays elements out; this file sets
+   how the type sits inside them. */
+
+html {
+  font-synthesis: none;
+}
+body {
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  font-weight: var(--fw);
+  line-height: var(--lh-body);
+  letter-spacing: 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--fw);
+  text-wrap: balance;
+}
+strong,
+b {
+  font-weight: var(--fw);
+}
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+/* Headlines and display type --------------------------------------- */
+
+.hero-title {
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+}
+.hero-title span {
+  display: block;
+}
+.hero-title .accent {
+  color: var(--accent-text);
+}
+
+.section-head h2,
+.cta-panel h2 {
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+}
+h2 em {
+  font-style: normal;
+  color: var(--accent-text);
+}
+
+.feature h3,
+.step h3 {
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+}
+
+/* Prose ------------------------------------------------------------ */
+
+.lede,
+.section-lede {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+  text-wrap: pretty;
+}
+.feature p,
+.step p,
+.cta-copy,
+.foot-desc {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.feature p code {
+  font-size: var(--fs-ui);
+}
+
+/* Data ------------------------------------------------------------- */
+
+.m-v {
+  font-size: var(--fs-stat);
+  line-height: 1;
+}
+
+/* UI: navigation, controls, links ---------------------------------- */
+
+.site-nav a,
+.gh-link,
+.lang-menu > summary,
+.lang-list a,
+.btn,
+.foot-col a,
+.foot-legal a,
+.skip-link {
+  font-size: var(--fs-ui);
+  line-height: var(--lh-ui);
+}
+.btn {
+  font-weight: var(--fw);
+}
+
+/* Meta: captions, tags, proof lines, code chrome -------------------- */
+
+.announce,
+.proof,
+.metrics-caption,
+.m-k,
+.m-d,
+.figure-note,
+.f-tag,
+.step-num,
+.foot-col-title,
+.foot-base,
+.code-head,
+.code-foot,
+.code-valid {
+  font-size: var(--fs-meta);
+  line-height: var(--lh-ui);
+}
+.foot-col-title {
+  font-weight: var(--fw);
+}
+.metrics-caption {
+  line-height: 1.5;
+}
+
+/* File content ----------------------------------------------------- */
+
+.code-body code {
+  font-size: var(--fs-ui);
+  line-height: 1.9;
+}
+.foot-install code {
+  font-size: var(--fs-ui);
+}

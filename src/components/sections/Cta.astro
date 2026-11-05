@@ -1,0 +1,33 @@
+---
+import Icon from "../Icon.astro";
+import { t, type Locale } from "../../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<section class="cta wrap">
+  <div class="cta-panel pane">
+    <div class="cta-surface pane-surface">
+      <h2>{t(locale, "cta-heading-1")}<br /><em>{t(locale, "cta-heading-2")}</em></h2>
+      <p class="cta-copy">{t(locale, "cta-body")}</p>
+      <div class="actions">
+        <a
+          class="btn btn-primary"
+          href="https://github.com/cliff-format/cliff/blob/main/spec/cliff-1.1.0.md"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span class="btn__label">{t(locale, "cta-action-spec")}</span>
+          <Icon name="arrowRight" />
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/cliff-format" target="_blank" rel="noreferrer">
+          <span class="btn__label">{t(locale, "cta-action-repos")}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

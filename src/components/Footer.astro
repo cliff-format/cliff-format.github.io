@@ -1,0 +1,124 @@
+---
+
+import Icon from "./Icon.astro";
+import { t, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const columns = [
+  {
+    title: "footer-resources",
+    links: [
+      { id: "footer-spec", href: "https://github.com/cliff-format/cliff/blob/main/spec/cliff-1.1.0.md" },
+      { id: "footer-abnf", href: "https://github.com/cliff-format/cliff/blob/main/spec/abnf/cliff-1.1.abnf" },
+      { id: "footer-style-guide", href: "https://github.com/cliff-format/cliff/blob/main/style/README.md" },
+      { id: "footer-rationale", href: "https://github.com/cliff-format/cliff/blob/main/docs/design-rationale.md" },
+      { id: "footer-changelog", href: "https://github.com/cliff-format/cliff/blob/main/CHANGELOG.md" },
+    ],
+  },
+  {
+    title: "footer-build",
+    links: [
+      { id: null, label: "cliff-js", href: "https://github.com/cliff-format/cliff-js" },
+      { id: null, label: "cliff-python", href: "https://github.com/cliff-format/cliff-python" },
+      { id: "footer-conformance", href: "https://github.com/cliff-format/cliff-test" },
+      { id: "footer-implementations", href: "https://github.com/cliff-format/cliff/blob/main/docs/implementations.md" },
+    ],
+  },
+  {
+    title: "footer-project",
+    links: [
+      { id: null, label: "GitHub", href: "https://github.com/cliff-format" },
+      { id: "footer-contributing", href: "https://github.com/cliff-format/cliff/blob/main/CONTRIBUTING.md" },
+      { id: "footer-security", href: "https://github.com/cliff-format/cliff/blob/main/SECURITY.md" },
+      { id: "footer-license", href: "https://github.com/cliff-format/cliff/blob/main/LICENSE" },
+    ],
+  },
+  {
+    title: "footer-community",
+    links: [
+      { id: "footer-discussions", href: "https://github.com/cliff-format/cliff/discussions" },
+      { id: "footer-issues", href: "https://github.com/cliff-format/cliff/issues" },
+      { id: "footer-benchmark", href: "https://github.com/cliff-format/cliff-test/blob/main/BENCHMARK.md" },
+    ],
+  },
+] as const;
+
+const command = "pnpm add @cliff-format/core";
+---
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-pane pane">
+      <div class="foot-surface pane-surface">
+        <div class="foot-top">
+          <div class="foot-brand">
+            <img class="brand-light" src="/logos/cliff-wordmark-light.svg" alt="CLIFF" height="24" />
+            <img class="brand-dark" src="/logos/cliff-wordmark-dark.svg" alt="CLIFF" height="24" />
+            <p class="foot-desc">{t(locale, "footer-description")}</p>
+            <div class="foot-install">
+              <code>{command}</code>
+              <button class="copy-btn" type="button" data-copy={command} aria-label={t(locale, "footer-copy")}>
+                <Icon name="copy" class="copy-idle ico" />
+                <Icon name="check" class="copy-done ico" />
+              </button>
+            </div>
+          </div>
+
+          <nav class="foot-cols" aria-label={t(locale, "footer-nav")}>
+            {
+              columns.map((column) => (
+                <section class="foot-col">
+                  <h2 class="foot-col-title">{t(locale, column.title)}</h2>
+                  <ul>
+                    {column.links.map((link) => (
+                      <li>
+                        <a href={link.href} target="_blank" rel="noreferrer">
+                          {"id" in link && link.id ? t(locale, link.id) : link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))
+            }
+          </nav>
+        </div>
+
+        <div class="foot-base">
+          <div class="foot-legal">
+            <img class="brand-light" src="/logos/cliff-logo-light.svg" alt="" width="20" height="20" />
+            <img class="brand-dark" src="/logos/cliff-logo-dark.svg" alt="" width="20" height="20" />
+            <span>{t(locale, "footer-legal", { year: String(new Date().getFullYear()) })}</span>
+            <a href="https://github.com/cliff-format" target="_blank" rel="noreferrer">{t(locale, "footer-contributors")}</a>
+          </div>
+          <div class="foot-social">
+            <a href="https://github.com/cliff-format" target="_blank" rel="noreferrer" aria-label="GitHub">
+              <Icon name="github" />
+            </a>
+            <a
+              href="https://github.com/cliff-format/cliff/discussions"
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t(locale, "footer-discussions")}
+            >
+              <Icon name="sparkle" />
+            </a>
+            <a
+              href="https://github.com/cliff-format/cliff/blob/main/spec/cliff-1.1.0.md"
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t(locale, "footer-spec-short")}
+            >
+              <Icon name="file" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

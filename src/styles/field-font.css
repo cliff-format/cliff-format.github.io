@@ -1,0 +1,13 @@
+/* Field Sans: one merged OFL Noto Sans family for the whole decorative
+   field. Noto Sans KR supplies Latin, Cyrillic, CJK, kana, and Hangul; Noto
+   Sans supplies the four Latin Extended glyphs the KR file lacks.
+   scripts/subset-field-font.py normalizes every glyph to a 1em cell, so plain
+   rows keep the 1.636em grid. The background is synthesized to 600. */
+
+@font-face {
+  font-family: "Field Sans";
+  src: url("/fonts/FieldSans.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}

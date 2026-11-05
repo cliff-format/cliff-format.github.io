@@ -1,0 +1,534 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: ru-RU
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+target: "Главная CLIFF"
+status: translated
+
+<nav-main>
+source: "主导航"
+target: "Основная навигация"
+status: translated
+
+<nav-format>
+source: "格式"
+target: "Формат"
+status: translated
+
+<nav-features>
+source: "特性"
+target: "Возможности"
+status: translated
+
+<nav-lifecycle>
+source: "生命周期"
+target: "Жизненный цикл"
+status: translated
+
+<nav-ecosystem>
+source: "生态"
+target: "Экосистема"
+status: translated
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+target: "CLIFF на GitHub"
+status: translated
+
+<nav-theme>
+source: "深色模式"
+target: "Тёмная тема"
+status: translated
+
+<nav-skip>
+source: "跳到正文"
+target: "Перейти к содержимому"
+status: translated
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+target: "Сменить язык"
+status: translated
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+target: "CLIFF — контекст и есть формат"
+status: translated
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+target: "CLIFF — это построчный рабочий формат файлов для локализации, где контекст на первом месте и покрыт весь цикл локализации. Понятен переводчикам, правится моделями, проверяется за один проход."
+status: translated
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+target: "Сохраните контекст."
+status: translated
+
+<cta-heading-2>
+source: "交付好翻译。"
+target: "Отдайте хороший перевод."
+status: translated
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+target: "Прочитайте спецификацию 1.1, выберите реализацию и проведите настоящий файл CLIFF через валидатор."
+type: description
+status: translated
+
+<cta-action-spec>
+source: "阅读规范"
+target: "Читать спецификацию"
+status: translated
+
+<cta-action-repos>
+source: "浏览仓库"
+target: "Смотреть репозитории"
+status: translated
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+target: "Рабочий формат,"
+status: translated
+
+<features-heading-2>
+source: "而非交换容器。"
+target: "а не контейнер обмена."
+status: translated
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+target: "Каждое решение ниже опирается на измерение или на спецификацию. Контекст несёт сам формат, переводчику не нужно угадывать."
+type: description
+status: translated
+
+<features-context-title>
+source: "上下文随行"
+target: "Контекст путешествует"
+status: translated
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+target: "Контекст клана, группы и записи наследуется. Открывая строку, переводчик знает, где она живёт, к кому обращена и что нельзя сломать."
+type: description
+status: translated
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+target: "клан → группа → запись"
+status: translated
+
+<features-line-title>
+source: "一行一个结构"
+target: "Одна строка — одна структура"
+status: translated
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+target: "Нет открывающих и закрывающих тегов на нескольких строках. Вставка, перенос или удаление строки никогда не оставляет незакрытую структуру — на это опираются и люди, и модели."
+type: description
+status: translated
+
+<features-line-tag>
+source: "单遍解析"
+target: "разбор за один проход"
+status: translated
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+target: "Типы там, где они нужны"
+status: translated
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+target: "{type} и {status} обязательны; закрытые словари превращают неоднозначный ввод в данные, которые валидатор может проверить, а инструменты — которым можно доверять."
+type: description
+status: translated
+
+<features-typed-tag>
+source: "封闭词表"
+target: "закрытые словари"
+status: translated
+
+<features-model-title>
+source: "为模型编辑而生"
+target: "Для правок моделью"
+status: translated
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+target: "Мягкий режим исправляет ошибки, которые модели действительно делают, и сообщает о каждом исправлении, а не угадывает. Строгий режим по-прежнему отвергает всё, что отвергает грамматика."
+type: description
+status: translated
+
+<features-model-tag>
+source: "严格 + 宽容"
+target: "строгий + мягкий"
+status: translated
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+target: "Самый низкий счёт по токенам"
+status: translated
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+target: "При той же нагрузке контекста документы CLIFF — самые компактные из десяти проверенных форматов. Короткие ключи и отсутствие закрывающих тегов накапливаются в каждом вызове."
+type: description
+status: translated
+
+<features-tokens-tag>
+source: "47,499 Token"
+target: "47 499 токенов"
+status: translated
+
+<features-icu-title>
+source: "ICU，原样保留"
+target: "ICU — без изменений"
+status: translated
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+target: "MessageFormat 1 и 2 сохраняются дословно внутри значений в кавычках, диалект определяется автоматически, а сложные множественные формы и выбор больше не особый случай."
+type: description
+status: translated
+
+<features-icu-tag>
+source: "MF1 + MF2"
+target: "MF1 + MF2"
+status: translated
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+target: "Построчный рабочий формат файлов для локализации, где контекст на первом месте."
+type: description
+status: translated
+
+<footer-nav>
+source: "页脚"
+target: "Подвал"
+status: translated
+
+<footer-copy>
+source: "复制安装命令"
+target: "Скопировать команду установки"
+status: translated
+
+<footer-resources>
+source: "资源"
+target: "Ресурсы"
+status: translated
+
+<footer-spec>
+source: "规范 1.1"
+target: "Спецификация 1.1"
+status: translated
+
+<footer-abnf>
+source: "ABNF 语法"
+target: "Грамматика ABNF"
+status: translated
+
+<footer-style-guide>
+source: "风格指南"
+target: "Руководство по стилю"
+status: translated
+
+<footer-rationale>
+source: "设计取舍"
+target: "Проектные решения"
+status: translated
+
+<footer-changelog>
+source: "更新日志"
+target: "Журнал изменений"
+status: translated
+
+<footer-build>
+source: "构建"
+target: "Разработка"
+status: translated
+
+<footer-conformance>
+source: "一致性测试"
+target: "Тесты соответствия"
+status: translated
+
+<footer-implementations>
+source: "实现登记"
+target: "Реализации"
+status: translated
+
+<footer-project>
+source: "项目"
+target: "Проект"
+status: translated
+
+<footer-contributing>
+source: "贡献指南"
+target: "Участие"
+status: translated
+
+<footer-security>
+source: "安全策略"
+target: "Безопасность"
+status: translated
+
+<footer-license>
+source: "MIT 许可"
+target: "Лицензия MIT"
+status: translated
+
+<footer-community>
+source: "社区"
+target: "Сообщество"
+status: translated
+
+<footer-discussions>
+source: "讨论"
+target: "Обсуждения"
+status: translated
+
+<footer-issues>
+source: "问题反馈"
+target: "Проблемы"
+status: translated
+
+<footer-benchmark>
+source: "实测报告"
+target: "Отчёт об измерениях"
+status: translated
+
+<footer-legal>
+source: "MIT License © {year}"
+target: "MIT License © {year}"
+type: sentence
+status: translated
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+target: "Участники CLIFF"
+status: translated
+
+<footer-spec-short>
+source: "规范"
+target: "Спецификация"
+status: translated
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+target: "Вышел CLIFF 1.1"
+status: translated
+
+<hero-announce-link>
+source: "阅读更新日志"
+target: "Читать журнал изменений"
+status: translated
+
+<hero-title-1>
+source: "上下文，"
+target: "Контекст,"
+status: translated
+
+<hero-title-2>
+source: "就是格式。"
+target: "это формат."
+status: translated
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+target: "Построчный рабочий файл для всего цикла локализации. Контекст клана, группы и записи путешествует со строкой — понятен переводчику, правится моделью, проверяется за один проход."
+type: description
+status: translated
+
+<hero-action-spec>
+source: "阅读规范"
+target: "Читать спецификацию"
+status: translated
+
+<hero-action-github>
+source: "在 GitHub 查看"
+target: "Смотреть на GitHub"
+status: translated
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+target: "v1.1 стабильная"
+status: translated
+
+<hero-proof-license>
+source: "MIT 许可"
+target: "Лицензия MIT"
+status: translated
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+target: "Сравнение с 10 форматами"
+status: translated
+
+<hero-figure-context>
+source: "上下文保留"
+target: "контекст сохранён"
+status: translated
+
+<hero-figure-tokens>
+source: "更少 Token"
+target: "меньше токенов"
+status: translated
+
+<hero-validated>
+source: "校验通过"
+target: "проверено"
+status: translated
+
+<hero-fixes>
+source: "0 处修复"
+target: "0 исправлений"
+status: translated
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+target: "От извлечения"
+status: translated
+
+<lifecycle-heading-2>
+source: "到交付。"
+target: "до поставки."
+status: translated
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+target: "Файл CLIFF — не разовая передача. Один и тот же файл проходит извлечение, перевод, вычитку и поставку, и контекст сохраняется на каждом шаге, а не пересобирается."
+type: description
+status: translated
+
+<lifecycle-extract-title>
+source: "提取"
+target: "Извлечение"
+status: translated
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+target: "Импортёр складывает существующие ключи в пути групп и сохраняет исходное написание как ключ сопоставления."
+type: description
+status: translated
+
+<lifecycle-translate-title>
+source: "翻译"
+target: "Перевод"
+status: translated
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+target: "Переводчик видит контекст клана, группы и записи в одном файле; модель получает безопасный документ с малым числом токенов."
+type: description
+status: translated
+
+<lifecycle-review-title>
+source: "审校"
+target: "Вычитка"
+status: translated
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+target: "Обязательные поля и закрытые словари делают вычитку механически проверяемой. Каждое исправление сообщается, и ничего не придумывается молча."
+type: description
+status: translated
+
+<lifecycle-deliver-title>
+source: "交付"
+target: "Поставка"
+status: translated
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+target: "Экспорт в рантайм, манифест движка или память переводов без пересборки исходного контекста."
+type: description
+status: translated
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+target: "Измеренные результаты"
+status: translated
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+target: "cliff-test: 960 вызовов перевода, 16 документов"
+type: description
+status: translated
+
+<metrics-token-key>
+source: "Token"
+target: "Токены"
+status: translated
+
+<metrics-token-detail>
+source: "十种格式中最低"
+target: "Меньше всех десяти форматов"
+type: description
+status: translated
+
+<metrics-context-key>
+source: "上下文"
+target: "Контекст"
+status: translated
+
+<metrics-context-detail>
+source: "往返后完整保留"
+target: "Сохранён после круга"
+type: description
+status: translated
+
+<metrics-fixes-key>
+source: "修复"
+target: "Исправления"
+status: translated
+
+<metrics-fixes-detail>
+source: "每次往返"
+target: "За круг"
+type: description
+status: translated
+
+<metrics-rewrite-key>
+source: "单次重写"
+target: "Одна перезапись"
+status: translated
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+target: "Доля успеха"
+type: description
+status: translated

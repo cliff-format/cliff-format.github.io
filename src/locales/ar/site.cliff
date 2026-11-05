@@ -1,0 +1,534 @@
+CLIFF 1.1
+namespace: cliff
+clan: site
+source-language: zh-CN
+target-language: ar
+title: "CLIFF site copy"
+
+[nav]
+type: label
+
+<nav-brand-home>
+source: "CLIFF 首页"
+target: "الصفحة الرئيسية لـ CLIFF"
+status: translated
+
+<nav-main>
+source: "主导航"
+target: "التنقل الرئيسي"
+status: translated
+
+<nav-format>
+source: "格式"
+target: "الصيغة"
+status: translated
+
+<nav-features>
+source: "特性"
+target: "المزايا"
+status: translated
+
+<nav-lifecycle>
+source: "生命周期"
+target: "دورة الحياة"
+status: translated
+
+<nav-ecosystem>
+source: "生态"
+target: "المنظومة"
+status: translated
+
+<nav-github>
+source: "在 GitHub 上查看 CLIFF"
+target: "عرض CLIFF على GitHub"
+status: translated
+
+<nav-theme>
+source: "深色模式"
+target: "الوضع الداكن"
+status: translated
+
+<nav-skip>
+source: "跳到正文"
+target: "انتقل إلى المحتوى"
+status: translated
+
+[lang]
+type: label
+
+<lang-switch>
+source: "切换语言"
+target: "تغيير اللغة"
+status: translated
+
+[meta]
+type: sentence
+
+<meta-title>
+source: "CLIFF — 上下文，就是格式"
+target: "CLIFF — السياق هو الصيغة"
+status: translated
+
+<meta-description>
+source: "CLIFF 是一个上下文优先、逐行书写的本地化工作文件格式，覆盖完整本地化生命周期。译者读得懂，模型改得动，校验一次通过。"
+target: "CLIFF صيغة ملف عمل للتعريب تُكتب سطرًا بسطر وتضع السياق أولًا، وتغطي دورة التعريب كاملة. يقرأها المترجم، ويعدّلها النموذج، وتُجاز في تمريرة واحدة."
+status: translated
+
+[cta]
+type: label
+
+<cta-heading-1>
+source: "留住上下文。"
+target: "احتفظ بالسياق."
+status: translated
+
+<cta-heading-2>
+source: "交付好翻译。"
+target: "سلّم ترجمة جيدة."
+status: translated
+
+<cta-body>
+source: "阅读 1.1 规范，选择一个实现，把真实的 CLIFF 文件送进校验器。"
+target: "اقرأ مواصفة 1.1، واختر تطبيقًا واحدًا، ومرّر ملف CLIFF حقيقيًا عبر المدقق."
+type: description
+status: translated
+
+<cta-action-spec>
+source: "阅读规范"
+target: "اقرأ المواصفة"
+status: translated
+
+<cta-action-repos>
+source: "浏览仓库"
+target: "تصفح المستودعات"
+status: translated
+
+[features]
+type: label
+
+<features-heading-1>
+source: "一个工作格式，"
+target: "صيغة عمل،"
+status: translated
+
+<features-heading-2>
+source: "而非交换容器。"
+target: "لا وعاء تبادل."
+status: translated
+
+<features-lede>
+source: "下面每个决定都有实测或规范支撑。格式本身携带上下文，翻译不必猜。"
+target: "كل قرار أدناه يستند إلى قياس أو إلى المواصفة. الصيغة تحمل السياق، فلا تحتاج الترجمة إلى التخمين."
+type: description
+status: translated
+
+<features-context-title>
+source: "上下文随行"
+target: "السياق يرافق النص"
+status: translated
+
+<features-context-body>
+source: "家族、分组与条目的上下文会被继承。译者打开一个字符串时，知道自己在哪里、说给谁听、不能破坏什么。"
+target: "سياق العشيرة والمجموعة والمدخل موروث. حين يفتح المترجم سلسلة، يعرف أين تعيش، ولمن تتحدث، وما لا يجوز كسره."
+type: description
+status: translated
+
+<features-context-tag>
+source: "家族 → 分组 → 条目"
+target: "عشيرة ← مجموعة ← مدخل"
+status: translated
+
+<features-line-title>
+source: "一行一个结构"
+target: "سطر واحد، بنية واحدة"
+status: translated
+
+<features-line-body>
+source: "没有跨行开合标签。插入、移动或删除一行，都不会让文档留下未闭合的结构——人和模型都依赖这一点。"
+target: "لا وسوم فتح وإغلاق تمتد عبر أسطر. إدراج سطر أو نقله أو حذفه لا يترك بنية غير مغلقة أبدًا، ويعتمد على ذلك البشر والنماذج معًا."
+type: description
+status: translated
+
+<features-line-tag>
+source: "单遍解析"
+target: "تحليل بتمريرة واحدة"
+status: translated
+
+<features-typed-title>
+source: "该有类型的地方有类型"
+target: "أنواع حيث تلزم الأنواع"
+status: translated
+
+<features-typed-body>
+source: "{type} 与 {status} 必填，封闭词表把含糊输入变成校验器能检查、工具链能信任的数据。"
+target: "{type} و{status} إلزاميان، والمفردات المغلقة تحوّل الإدخال الغامض إلى بيانات يستطيع المدقق فحصها وتستطيع سلسلة الأدوات الوثوق بها."
+type: description
+status: translated
+
+<features-typed-tag>
+source: "封闭词表"
+target: "مفردات مغلقة"
+status: translated
+
+<features-model-title>
+source: "为模型编辑而生"
+target: "مصممة لتحرير النماذج"
+status: translated
+
+<features-model-body>
+source: "宽容模式会修复模型真正会犯的错误，并逐条报告修复，而不是猜测。严格模式仍然拒绝语法拒绝的一切。"
+target: "الوضع المتسامح يصلح الأخطاء التي تقع فيها النماذج فعلًا ويبلّغ عن كل إصلاح بدلًا من التخمين. والوضع الصارم ما زال يرفض كل ما ترفضه القواعد."
+type: description
+status: translated
+
+<features-model-tag>
+source: "严格 + 宽容"
+target: "صارم + متسامح"
+status: translated
+
+<features-tokens-title>
+source: "最低的 Token 账单"
+target: "أدنى فاتورة رموز"
+status: translated
+
+<features-tokens-body>
+source: "在相同上下文负载下，CLIFF 文档在十种被测格式中体积最小。短键名与无闭合标签会在每次调用中累积优势。"
+target: "مع الحجم نفسه من السياق، تكون مستندات CLIFF الأصغر بين الصيغ العشر المختبرة. المفاتيح القصيرة وغياب وسوم الإغلاق تتراكم في كل نداء."
+type: description
+status: translated
+
+<features-tokens-tag>
+source: "47,499 Token"
+target: "47,499 رمزًا"
+status: translated
+
+<features-icu-title>
+source: "ICU，原样保留"
+target: "ICU كما هو"
+status: translated
+
+<features-icu-body>
+source: "MessageFormat 1 与 2 在引号值中逐字保留，方言自动识别，复杂复数和选择不再是特例。"
+target: "يبقى MessageFormat 1 و2 حرفيًا داخل القيم بين علامات الاقتباس، وتُكتشف اللهجة تلقائيًا، ولم تعد صيغ الجمع والاختيار المعقدة حالات خاصة."
+type: description
+status: translated
+
+<features-icu-tag>
+source: "MF1 + MF2"
+target: "MF1 + MF2"
+status: translated
+
+[footer]
+type: label
+
+<footer-description>
+source: "上下文优先、逐行书写的本地化工作文件格式。"
+target: "صيغة ملف عمل للتعريب تُكتب سطرًا بسطر وتضع السياق أولًا."
+type: description
+status: translated
+
+<footer-nav>
+source: "页脚"
+target: "التذييل"
+status: translated
+
+<footer-copy>
+source: "复制安装命令"
+target: "انسخ أمر التثبيت"
+status: translated
+
+<footer-resources>
+source: "资源"
+target: "مصادر"
+status: translated
+
+<footer-spec>
+source: "规范 1.1"
+target: "المواصفة 1.1"
+status: translated
+
+<footer-abnf>
+source: "ABNF 语法"
+target: "قواعد ABNF"
+status: translated
+
+<footer-style-guide>
+source: "风格指南"
+target: "دليل الأسلوب"
+status: translated
+
+<footer-rationale>
+source: "设计取舍"
+target: "قرارات التصميم"
+status: translated
+
+<footer-changelog>
+source: "更新日志"
+target: "سجل التغييرات"
+status: translated
+
+<footer-build>
+source: "构建"
+target: "التطوير"
+status: translated
+
+<footer-conformance>
+source: "一致性测试"
+target: "اختبارات المطابقة"
+status: translated
+
+<footer-implementations>
+source: "实现登记"
+target: "التطبيقات"
+status: translated
+
+<footer-project>
+source: "项目"
+target: "المشروع"
+status: translated
+
+<footer-contributing>
+source: "贡献指南"
+target: "المساهمة"
+status: translated
+
+<footer-security>
+source: "安全策略"
+target: "الأمان"
+status: translated
+
+<footer-license>
+source: "MIT 许可"
+target: "رخصة MIT"
+status: translated
+
+<footer-community>
+source: "社区"
+target: "المجتمع"
+status: translated
+
+<footer-discussions>
+source: "讨论"
+target: "النقاشات"
+status: translated
+
+<footer-issues>
+source: "问题反馈"
+target: "المشكلات"
+status: translated
+
+<footer-benchmark>
+source: "实测报告"
+target: "تقرير القياس"
+status: translated
+
+<footer-legal>
+source: "MIT License © {year}"
+target: "MIT License © {year}"
+type: sentence
+status: translated
+
+<footer-contributors>
+source: "CLIFF 贡献者"
+target: "مساهمو CLIFF"
+status: translated
+
+<footer-spec-short>
+source: "规范"
+target: "المواصفة"
+status: translated
+
+[hero]
+type: label
+
+<hero-announce>
+source: "CLIFF 1.1 已发布"
+target: "صدر CLIFF 1.1"
+status: translated
+
+<hero-announce-link>
+source: "阅读更新日志"
+target: "اقرأ سجل التغييرات"
+status: translated
+
+<hero-title-1>
+source: "上下文，"
+target: "السياق،"
+status: translated
+
+<hero-title-2>
+source: "就是格式。"
+target: "هو الصيغة."
+status: translated
+
+<hero-lede>
+source: "一个面向完整本地化生命周期的逐行工作文件。家族、分组与条目的上下文随字符串流动——译者读得懂，模型改得动，校验一次通过。"
+target: "ملف عمل سطري لدورة التعريب كاملة. سياق العشيرة والمجموعة والمدخل يسير مع كل سلسلة: يقرأه المترجم، ويعدّله النموذج، ويُجاز في تمريرة واحدة."
+type: description
+status: translated
+
+<hero-action-spec>
+source: "阅读规范"
+target: "اقرأ المواصفة"
+status: translated
+
+<hero-action-github>
+source: "在 GitHub 查看"
+target: "عرض على GitHub"
+status: translated
+
+<hero-proof-version>
+source: "v1.1 稳定版"
+target: "v1.1 مستقرة"
+status: translated
+
+<hero-proof-license>
+source: "MIT 许可"
+target: "رخصة MIT"
+status: translated
+
+<hero-proof-tested>
+source: "与 10 种格式同场实测"
+target: "قورنت بعشر صيغ"
+status: translated
+
+<hero-figure-context>
+source: "上下文保留"
+target: "سياق محفوظ"
+status: translated
+
+<hero-figure-tokens>
+source: "更少 Token"
+target: "رموز أقل"
+status: translated
+
+<hero-validated>
+source: "校验通过"
+target: "تم التحقق"
+status: translated
+
+<hero-fixes>
+source: "0 处修复"
+target: "0 إصلاحات"
+status: translated
+
+[lifecycle]
+type: label
+
+<lifecycle-heading-1>
+source: "从提取，"
+target: "من الاستخراج،"
+status: translated
+
+<lifecycle-heading-2>
+source: "到交付。"
+target: "إلى التسليم."
+status: translated
+
+<lifecycle-lede>
+source: "CLIFF 不是一次性的交接物。同一个文件经历提取、翻译、审校与交付，上下文在每一步都保留下来，而不是被重建。"
+target: "ملف CLIFF ليس تسليمًا لمرة واحدة. الملف نفسه يمر بالاستخراج والترجمة والمراجعة والتسليم، ويبقى السياق في كل خطوة بدل أن يُعاد بناؤه."
+type: description
+status: translated
+
+<lifecycle-extract-title>
+source: "提取"
+target: "الاستخراج"
+status: translated
+
+<lifecycle-extract-body>
+source: "导入器把既有键折叠成分组路径，并保留源拼写作为匹配键。"
+target: "يطوي المستورد المفاتيح القائمة في مسارات مجموعات ويحتفظ بالكتابة الأصلية مفتاحًا للمطابقة."
+type: description
+status: translated
+
+<lifecycle-translate-title>
+source: "翻译"
+target: "الترجمة"
+status: translated
+
+<lifecycle-translate-body>
+source: "译者能在同一个文件里看到家族、分组与条目上下文；模型拿到的是一份安全、低 Token 的文档。"
+target: "يرى المترجمون سياق العشيرة والمجموعة والمدخل في ملف واحد، وتتلقى النماذج مستندًا آمنًا بقليل من الرموز."
+type: description
+status: translated
+
+<lifecycle-review-title>
+source: "审校"
+target: "المراجعة"
+status: translated
+
+<lifecycle-review-body>
+source: "必填标签与封闭词表让审校变得可机械检查。每处修复都会被报告，绝不会静默编造。"
+target: "الحقول الإلزامية والمفردات المغلقة تجعل المراجعة قابلة للفحص آليًا. يُبلَّغ عن كل إصلاح ولا يُختلق شيء بصمت."
+type: description
+status: translated
+
+<lifecycle-deliver-title>
+source: "交付"
+target: "التسليم"
+status: translated
+
+<lifecycle-deliver-body>
+source: "导出到运行时、引擎清单或翻译记忆，不必重建最初的上下文。"
+target: "صدّر إلى بيئة تشغيل أو بيان محرك أو ذاكرة ترجمة دون إعادة بناء السياق الأصلي."
+type: description
+status: translated
+
+[metrics]
+type: label
+
+<metrics-caption>
+source: "实测结果"
+target: "نتائج مقيسة"
+status: translated
+
+<metrics-source>
+source: "cliff-test：960 次翻译调用，16 份文档"
+target: "cliff-test: 960 نداء ترجمة، 16 مستندًا"
+type: description
+status: translated
+
+<metrics-token-key>
+source: "Token"
+target: "الرموز"
+status: translated
+
+<metrics-token-detail>
+source: "十种格式中最低"
+target: "الأدنى بين عشر صيغ"
+type: description
+status: translated
+
+<metrics-context-key>
+source: "上下文"
+target: "السياق"
+status: translated
+
+<metrics-context-detail>
+source: "往返后完整保留"
+target: "محفوظ بعد الذهاب والعودة"
+type: description
+status: translated
+
+<metrics-fixes-key>
+source: "修复"
+target: "الإصلاحات"
+status: translated
+
+<metrics-fixes-detail>
+source: "每次往返"
+target: "لكل ذهاب وعودة"
+type: description
+status: translated
+
+<metrics-rewrite-key>
+source: "单次重写"
+target: "إعادة كتابة واحدة"
+status: translated
+
+<metrics-rewrite-detail>
+source: "重写有效率"
+target: "نسبة النجاح"
+type: description
+status: translated

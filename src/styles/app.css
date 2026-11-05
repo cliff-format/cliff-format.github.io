@@ -1,0 +1,27 @@
+/* Tailwind first: its preflight lives in a cascade layer, so the design system
+   below stays authoritative. The page is built from the design-system classes in
+   base.css and typography.css; utilities stay available for one-off layout. */
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./field-font.css";
+@import "./base.css";
+@import "./graphite.css";
+@import "./site.css";
+@import "./typography.css";
+
+/* Bridge runtime M3 roles into Tailwind's theme so utilities can use them.
+   `inline` keeps the var() reference instead of resolving at build time. */
+@theme inline {
+  --color-surface: var(--m3-surface);
+  --color-surface-low: var(--m3-surface-container-low);
+  --color-on-surface: var(--m3-on-surface);
+  --color-on-surface-variant: var(--m3-on-surface-variant);
+  --color-muted: var(--m3-on-surface-muted);
+  --color-line: var(--m3-outline);
+  --color-line-strong: var(--m3-outline-variant);
+  --color-brand: var(--m3-primary);
+  --color-on-brand: var(--m3-on-primary);
+  --color-accent: var(--m3-on-primary-container);
+  --font-sans: var(--font-ui);
+  --font-code: var(--font-mono);
+}
