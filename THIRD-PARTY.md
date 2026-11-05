@@ -1,9 +1,11 @@
 # Third-party notices
 
-## liquid-glass
+## Liquid glass
 
-The data-URI SVG displacement map and filter in `src/scripts/glass-filter.ts`
-are adapted from [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass).
+The glass material in `src/lib/liquid-glass/` is vendored from
+[nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass): the
+displacement map, the chromatic split filter, the layer structure, and the
+renderer. The local copy adds a radius prop, a tint hook, and a deferred mount.
 
 MIT License
 

@@ -4,10 +4,10 @@
    sets color and surface only — structure lives in base.css and type in
    typography.css. Roles are the same names across both themes.
 
-   The glass is CSS/SVG: each pane carries a displacement filter that bends the
-   real backdrop at the edge, plus a neutral tint. Tokens
-   below describe the scene and the tint; the lens geometry lives in
-   src/scripts/glass.ts. */
+   The glass is the vendored LiquidGlass component: each pane bends the real
+   backdrop at its edge and paints a neutral tint over it. The tokens below
+   describe the scene and that tint; the layer structure lives in
+   src/lib/liquid-glass/. */
 
 html[data-theme="dark"] {
   --m3-primary: #00c853;
@@ -36,33 +36,32 @@ html[data-theme="dark"] {
   --glow-b: rgba(0, 200, 83, 0.08);
   --grain: 0.03;
 
-  /* The scene behind the glass: the dot field is the carrier for the lens. */
+  /* The scene behind the glass: the field text is what the lens bends. */
   --field-text: rgba(255, 255, 255, 0.06);
-  --glass-sheen: rgba(255, 255, 255, 0.08);
-  --glass-shade: rgba(0, 0, 0, 0.08);
 
-  /* Fallback glass: used before JS and where the data-URI filter cannot run. */
+  /* Glass tint. The library paints it as an overlay over the refracted
+     backdrop, so one value per pane is all the theme has to supply. */
+  --glass-tint: rgba(0, 0, 0, 0.26);
+  --glass-head-tint: rgba(0, 0, 0, 0.26);
+  --glass-code-tint: rgba(0, 0, 0, 0.26);
+  --glass-cta-tint: rgba(0, 0, 0, 0.26);
+  --glass-menu-tint: rgba(10, 12, 13, 0.84);
+  /* The brand CTA is tinted glass, the way iOS tints a glass button: the fill
+     stays close to opaque so the label holds, the rim still refracts. */
+  --glass-brand-tint: rgba(0, 200, 83, 0.78);
+
+  /* Flat surfaces: controls that sit on top of the glass, not in it. */
   --glass-low: rgba(255, 255, 255, 0.05);
   --glass-high: rgba(255, 255, 255, 0.1);
   --glass-line: rgba(255, 255, 255, 0.11);
-  --glass-pane-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.028));
-  --glass-pane-tint: rgba(30, 35, 36, 0.3);
-  --glass-head-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.04));
-  --glass-head-tint: rgba(28, 33, 34, 0.38);
-  --glass-code-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
-  --glass-code-tint: rgba(14, 18, 19, 0.3);
-  --glass-cta-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
-  --glass-cta-tint: rgba(28, 33, 34, 0.34);
-  --glass-menu-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
-  --glass-menu-tint: rgba(10, 12, 13, 0.94);
   --glass-rule: rgba(255, 255, 255, 0.09);
 
-  --glass-top-light: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 1px 0 var(--glass-top-light) inset, 0 28px 64px -34px rgba(0, 0, 0, 0.92), 0 2px 6px rgba(0, 0, 0, 0.32);
-  --head-shadow: 0 1px 0 var(--glass-top-light) inset, 0 20px 50px -28px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.3);
+  /* The white frost that sits above the refraction: a very light veil, enough
+     to read as glass, not enough to hide the bent backdrop. */
+  --glass-frost: rgba(255, 255, 255, 0.045);
 
-  --btn-ghost-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
-  --btn-ghost-tint: rgba(20, 24, 25, 0.36);
+  --glass-shadow: 0 28px 64px -34px rgba(0, 0, 0, 0.92), 0 2px 6px rgba(0, 0, 0, 0.32);
+  --head-shadow: 0 20px 50px -28px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.3);
 
   --bg: var(--m3-surface);
   --text: var(--m3-on-surface);
@@ -117,30 +116,23 @@ html[data-theme="light"] {
   --grain: 0.02;
 
   --field-text: rgba(20, 28, 23, 0.05);
-  --glass-sheen: rgba(255, 255, 255, 0.5);
-  --glass-shade: rgba(24, 32, 27, 0.03);
+
+  --glass-tint: rgba(255, 255, 255, 0.36);
+  --glass-head-tint: rgba(255, 255, 255, 0.46);
+  --glass-code-tint: rgba(255, 255, 255, 0.4);
+  --glass-cta-tint: rgba(255, 255, 255, 0.36);
+  --glass-menu-tint: rgba(252, 253, 252, 0.92);
+  --glass-brand-tint: rgba(0, 140, 70, 0.86);
 
   --glass-low: rgba(255, 255, 255, 0.5);
   --glass-high: rgba(255, 255, 255, 0.8);
   --glass-line: rgba(24, 32, 27, 0.1);
-  --glass-pane-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.24));
-  --glass-pane-tint: rgba(255, 255, 255, 0.08);
-  --glass-head-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.4));
-  --glass-head-tint: rgba(255, 255, 255, 0.1);
-  --glass-code-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5));
-  --glass-code-tint: rgba(255, 255, 255, 0.1);
-  --glass-cta-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.3));
-  --glass-cta-tint: rgba(255, 255, 255, 0.08);
-  --glass-menu-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
-  --glass-menu-tint: rgba(252, 253, 252, 0.94);
   --glass-rule: rgba(24, 32, 27, 0.1);
 
-  --glass-top-light: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 1px 0 var(--glass-top-light) inset, 0 30px 60px -36px rgba(24, 34, 29, 0.45), 0 2px 6px rgba(24, 34, 29, 0.06);
-  --head-shadow: 0 1px 0 var(--glass-top-light) inset, 0 20px 46px -26px rgba(24, 34, 29, 0.32), 0 2px 6px rgba(24, 34, 29, 0.06);
+  --glass-frost: rgba(255, 255, 255, 0.12);
 
-  --btn-ghost-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56));
-  --btn-ghost-tint: rgba(255, 255, 255, 0.26);
+  --glass-shadow: 0 30px 60px -36px rgba(24, 34, 29, 0.45), 0 2px 6px rgba(24, 34, 29, 0.06);
+  --head-shadow: 0 20px 46px -26px rgba(24, 34, 29, 0.32), 0 2px 6px rgba(24, 34, 29, 0.06);
 
   --bg: var(--m3-surface);
   --text: var(--m3-on-surface);
@@ -168,8 +160,7 @@ html[data-theme="light"] {
 }
 
 /* Scene: a graphite canvas lit by one green source behind the specimen and one
-   behind the call to action. The dots and rulings give the glass something to
-   bend. */
+   behind the call to action. The field text is what the glass bends. */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -251,6 +242,7 @@ html[data-theme="light"] {
     transform: translate3d(0, 0, 0);
   }
 }
+
 .bd-grain {
   display: block;
   opacity: var(--grain);

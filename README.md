@@ -10,8 +10,9 @@ src/
 ├─ i18n.ts              本地化入口：读取 src/locales/*.cliff，按语言渲染
 ├─ layouts/             BaseLayout：主题解析、字体预载、hreflang、全局样式入口
 ├─ locales/             站点文案；一个目标语言一个文件
+├─ lib/liquid-glass/    LiquidGlass 组件：库的副本、位移图、挂载
 ├─ pages/               路由：index.astro 是中文页，[lang]/index.astro 承载其余语言
-├─ scripts/             客户端行为：主题切换、玻璃光学、语言菜单、复制
+├─ scripts/             客户端行为：主题切换、语言菜单、复制
 └─ styles/
    ├─ app.css           Tailwind + 设计系统的唯一入口
    ├─ tokens.css        字体、字号角色、间距、形状、动效 token
@@ -24,7 +25,7 @@ src/
 
 正文只用两族：Smiley Sans（得意黑）承担全部文案与界面，JetBrains Mono 只用于文件内容与安装命令。背景装饰字符例外：使用一份合并的 OFL **Field Sans**——Noto Sans 提供全部拉丁与西里尔（含 4 个拉丁扩展字符），Noto Sans KR 提供 CJK、日文假名与韩文；共 126 字，合并为一个字体文件，背景不再使用 Smiley。Field Sans 的每个字形固定 1em advance，背景字重由 400 合成到 600。正文的字重只有 400。
 
-玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 data-URI SVG 位移滤镜：每个面板生成 `feImage` 法线图和 `feDisplacementMap`，通过 `backdrop-filter` 直接折弯真实背景；没有场景复制、canvas 或 WebGL。Chromium 渲染滤镜，Safari 与 Firefox 保留透明 tint、顶部光和阴影的 fallback。玻璃默认不模糊（blur 0），圆角与页头统一 40px。结构约定见 [docs/style.md](docs/style.md)，许可声明见 [THIRD-PARTY.md](THIRD-PARTY.md)。
+玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 `LiquidGlass`：`src/lib/liquid-glass/` 是它的副本，位移图、三通道色散、rim 和层序都由库生成，`mount.ts` 只负责挂载和尺寸。面板沿用 40px 的 G2 圆角（`corner-shape: squircle`）、胶囊按钮 999px，二者通过 `radius` 同步给位移图，位移图再按计算出的 `corner-shape` 画同一条超椭圆；底板色由主题的 `--lg-tint` 提供，材质是 `blur 3` 的轻磨砂加一层 `--glass-frost` 的浅白染色。结构约定见 [docs/style.md](docs/style.md)，许可声明见 [THIRD-PARTY.md](THIRD-PARTY.md)。
 
 ## 命令
 
@@ -50,7 +51,7 @@ python scripts/noto-unicode-range.py     # 同步 Noto Sans SC 的 unicode-range
 
 ## 性能
 
-首屏保持约 1,000 个 DOM 节点。本地基础字体是 3 个（Smiley、JetBrains 400、Field Sans，合计约 84 KB），韩语和阿拉伯语页面再加自己的正文字体。背景是纯文本行 + 固定方格 Field Sans，CSS 只用 transform 做循环；没有 Canvas、运行时字形测量或第三方字体请求。不要恢复逐字 `<span>`。玻璃滤镜是增强项，在 `load` 后才生成，不要改回首屏同步初始化。
+首屏约 950 个 DOM 节点：每块玻璃两个空 div（滤镜层、磨砂层），外加文档里一份共享的 `<svg><defs>`（每块玻璃一个 `<filter>`）——旧实现为每块玻璃克隆一份背景，挂载后约 5,000 个节点。本地基础字体是 3 个（Smiley、JetBrains 400、Field Sans，合计约 84 KB），韩语和阿拉伯语页面再加自己的正文字体。背景是纯文本行 + 固定方格 Field Sans，CSS 只用 transform 做循环；没有 Canvas、运行时字形测量或第三方字体请求。不要恢复逐字 `<span>`。玻璃滤镜是增强项，在 `load` 后由 `requestIdleCallback` 生成，不要改回首屏同步初始化。`backdrop-filter: url()` 在 backdrop 移动时由软件栅格化，代价与滤镜面积成正比；试过把面板拆成“中心模糊 + 四条边缘条做位移”来缩小面积，但位移最多要拉 `strength` 像素的背景，比它窄的条带会露出深色硬边，所以维持整块滤镜。
 
 ```bash
 CPU=4 node scripts/perf-probe.mjs        # 节点数、DCL、LCP、字体与长任务
@@ -106,9 +107,9 @@ node scripts/filmstrip.mjs shots/film   # 首屏入场逐帧
 - 主题默认深色，选择保存在 `cliff-theme`；`?t=` 可以强制指定。
 - 文案与界面用 Smiley Sans 400，代码用 JetBrains Mono 400；韩语与阿拉伯语用 Noto Sans KR / Noto Sans Arabic 的子集（得意黑没有这两套字符），由 `unicode-range` 限定在各自脚本内。背景装饰字符用 Field Sans（Noto Sans + Noto Sans KR 合并），400 合成到 600；这是唯一例外。不要新增其它字号或字重，改用 [docs/style.md](docs/style.md) 里的角色。
 - 页面动效只有两类：首屏一次性入场、用户操作后的反馈。不要用滚动触发。
-- 新的面板用 `.pane` > `.pane-surface`；`src/scripts/glass.ts` 只写入内联 `backdrop-filter`，不注入子层。`.pane-surface` 只放内容，不要写底色、边框或阴影。不要给玻璃加手写描边；圆角用 `corner-shape: squircle`，面板统一 40px。
+- 新的面板写成 `<LiquidGlass class="pane …" radius={40}>` > `.pane-surface`；不要写 `backdrop-filter`、filter 或位移图，也不要给 `.pane` 加背景——它会把折射盖掉。圆角是 G2：`corner-shape: squircle`（`superellipse(2)`），面板统一 40px，折射层用 `corner-shape: inherit` 跟随，位移图按计算值生成同一条超椭圆；`radius` 必须与 CSS 一致。`.pane-surface` 只放内容。
 - 背景是 `BackgroundText.astro` 的随机多语言字符行：整体 -20°，奇偶行反向；不要改回点阵背景。每行是纯文本，1.636em 方格由固定 advance 字体加 `letter-spacing` 形成，禁止逐字包裹 `<span>`。
 - 页头吸顶：`body` 只能 `overflow-x: clip`（`hidden` 会造出滚动容器、让 sticky 失效）；下拉菜单走 Popover API 进顶层，避免被页头的圆角与层叠顺序裁掉。
-- 按钮直接加 `.btn`；`.btn-ghost` 会得到小尺寸位移滤镜，主按钮是品牌绿实色。不要再包玻璃层，也不要加硬边框。
+- 按钮用 `<GlassButton>` 包住 `.btn`：它是 `LiquidGlass` 的站点默认值（胶囊、`depth 8`、`strength 80`、与面板同亮度/饱和度）。`brand` 换成绿色叠层，`btn-primary` 自己不再画底色；`.btn` 只负责排版与图标。不要再加硬边框或另写一层玻璃。
 - 规范、风格指南与设计取舍的正文不在本仓库维护，页脚直接链接到 `cliff-format/cliff`；本站只负责导航与呈现。
 - 提交与分支规则见 [docs/version-control.md](docs/version-control.md)。

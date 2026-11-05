@@ -1,0 +1,155 @@
+---
+/**
+ * Liquid glass container.
+ *
+ * Vendored from [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass)
+ * (MIT, © Nik Delvin). The displacement map, chromatic split, rim, and layer
+ * order are unchanged. Only the wiring this site needs is adapted:
+ *
+ * - `radius` writes the corner radius into the inline style that the renderer
+ *   reads for the map; `tint` themes the overlay instead of one hard-coded
+ *   colour.
+ * - The inner box is found by class, not by `id="liquid-glass"`, so a page can
+ *   hold many instances.
+ * - `class` styles the outer wrapper only. The inner box is absolutely
+ *   positioned and clipped by the wrapper, so it needs no caller styles.
+ * - `brightness` and `saturate` override the two per-variant defaults, so a
+ *   button can share the pane optics instead of the softer button preset.
+ * - `frost` paints a second, faint white veil above the filter: the frosted
+ *   cast of the material. It defaults to `--glass-frost`.
+ * - The animated-image background prop and its anime.js dependency are not
+ *   used by this site and are not carried over.
+ */
+interface Props {
+  class?: string;
+  depth?: number;
+  strength?: number;
+  chromaticAberration?: number;
+  blur?: number;
+  color?: "black" | "white" | "transparent";
+  tint?: string;
+  brightness?: number;
+  saturate?: number;
+  /** White veil painted over the refracted backdrop; defaults to --glass-frost. */
+  frost?: string;
+  radius?: number | string;
+  noMorph?: true;
+  button?: true;
+  inline?: true;
+}
+
+const {
+  class: className,
+  depth = 10,
+  strength = 100,
+  chromaticAberration = 0,
+  blur = 0,
+  color = "transparent",
+  tint,
+  brightness,
+  saturate,
+  frost,
+  radius,
+  noMorph,
+  button,
+  inline,
+} = Astro.props;
+
+// The library's default tint stays the fallback, and a page can theme every
+// instance by declaring --lg-tint instead of passing the prop each time.
+const fallbackTint =
+  button != null || noMorph != null ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.3)";
+const overlayStyle = `background: ${tint ?? `var(--lg-tint, ${fallbackTint})`};`;
+// A second, much fainter white layer above the filter: the frosted cast that
+// makes the material read as glass rather than a bare refraction.
+const frostStyle = `background: ${frost ?? "var(--glass-frost, rgba(255, 255, 255, 0.05))"};`;
+const radiusStyle =
+  radius == null ? "" : `border-radius: ${typeof radius === "number" ? radius + "px" : radius};`;
+
+const wrapperClass = [
+  className ?? "",
+  "liquid-glass relative overflow-hidden",
+  inline != null ? "inline-flex align-middle" : "w-max",
+  button != null ? "button cursor-pointer shadow-[0px_0px_1px_white] origin-[top_center]" : "",
+]
+  .filter(Boolean)
+  .join(" ");
+
+const contentClass =
+  inline != null || button != null
+    ? "lg-content relative z-3 flex w-full items-center justify-center text-center"
+    : "lg-content relative z-3 w-full";
+
+const boxClass = `glass-box m-0! glass-${color}`;
+---
+
+{
+  inline ? (
+    <span class={wrapperClass} style={radiusStyle || undefined}>
+      <span class="lg-overlay-bg absolute inset-0 z-1" style={overlayStyle} />
+      <span class={contentClass}>
+        <slot />
+      </span>
+      <span class="lg-filter-layer absolute inset-0 z-2">
+        <span
+          data-blur={blur}
+          data-cab={chromaticAberration}
+          data-depth={depth}
+          data-strength={strength}
+          data-saturate={saturate ?? (button == null ? 1.5 : 1.2)}
+          data-brightness={brightness ?? (button == null ? 1.1 : 1.6)}
+          class={boxClass}
+          style={radiusStyle || undefined}
+        />
+      </span>
+      <span class="lg-frost pointer-events-none absolute inset-0 z-2" style={frostStyle} aria-hidden="true" />
+    </span>
+  ) : (
+    <div class={wrapperClass} style={radiusStyle || undefined}>
+      <div class="lg-overlay-bg absolute inset-0 z-1" style={overlayStyle} />
+      <div class={contentClass}>
+        <slot />
+      </div>
+      <div class="lg-filter-layer absolute inset-0 z-2">
+        <div
+          data-blur={blur}
+          data-cab={chromaticAberration}
+          data-depth={depth}
+          data-strength={strength}
+          data-saturate={saturate ?? (button == null ? 1.5 : 1.2)}
+          data-brightness={brightness ?? (button == null ? 1.1 : 1.6)}
+          class={boxClass}
+          style={radiusStyle || undefined}
+        />
+      </div>
+      <div class="lg-frost pointer-events-none absolute inset-0 z-2" style={frostStyle} aria-hidden="true" />
+    </div>
+  )
+}
+<style>
+  .liquid-glass.button {
+    transition: all 0.3s ease-out;
+    scale: 1;
+    rotate: 0deg;
+  }
+  .liquid-glass.button:hover {
+    scale: 1.05;
+    rotate: -1deg;
+  }
+  .glass-box.glass-black {
+    background: #09090b80;
+    box-shadow: inset 0 0 4px 0px #fafafa80;
+    filter: brightness(0.6);
+  }
+  .glass-box.glass-white {
+    background: #fafafa80;
+    box-shadow: inset 0 0 4px 0px #fafafa80;
+  }
+  .glass-box.glass-transparent {
+    background: #09090b00;
+    box-shadow: inset 0 0 4px 0px #fafafa80;
+  }
+</style>
+<script>
+  import "./mount";
+</script>

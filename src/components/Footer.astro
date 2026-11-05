@@ -1,6 +1,7 @@
 ---
 
 import Icon from "./Icon.astro";
+import LiquidGlass from "../lib/liquid-glass/LiquidGlass.astro";
 import { t, type Locale } from "../i18n";
 
 interface Props {
@@ -53,7 +54,7 @@ const command = "pnpm add @cliff-format/core";
 
 <footer class="site-foot">
   <div class="wrap">
-    <div class="foot-pane pane">
+    <LiquidGlass class="foot-pane pane" radius={40} depth={10} blur={3} chromaticAberration={2}>
       <div class="foot-surface pane-surface">
         <div class="foot-top">
           <div class="foot-brand">
@@ -119,6 +120,6 @@ const command = "pnpm add @cliff-format/core";
           </div>
         </div>
       </div>
-    </div>
+    </LiquidGlass>
   </div>
 </footer>

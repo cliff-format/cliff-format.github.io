@@ -1,8 +1,7 @@
 // Page behavior: theme state, its view transition, copy-to-clipboard, and the
-// glass surfaces. Every effect is an enhancement; the page renders and
-// animates without this module, and the entrance sequence is pure CSS.
-
-import { initGlass } from "./glass";
+// language menu. Every effect is an enhancement; the page renders and animates
+// without this module, and the entrance sequence is pure CSS. Glass is inert
+// here — the LiquidGlass component mounts itself once the document is parsed.
 
 type Theme = "light" | "dark";
 
@@ -139,25 +138,3 @@ for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")
 }
 
 syncUi();
-
-/* Glass is an enhancement: generate its displacement maps after the first
-   paint and font work, so the CSS fallback shows immediately and the main
-   thread stays free for the hero. */
-const startGlass = (): void => {
-  try {
-    initGlass();
-  } catch {
-    // A failed filter leaves the CSS glass intact.
-  }
-};
-addEventListener(
-  "load",
-  () => {
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(startGlass, { timeout: 1000 });
-    } else {
-      setTimeout(startGlass, 200);
-    }
-  },
-  { once: true },
-);

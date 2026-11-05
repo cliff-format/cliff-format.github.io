@@ -60,45 +60,44 @@
 
 ## 液态玻璃
 
-玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 data-URI SVG 位移滤镜：`glass.ts` 逐个面板生成 `feImage` 法线图和 `feDisplacementMap`，把 `blur(0) url('data:…') blur(0) brightness() saturate()` 写进 `backdrop-filter`。滤镜直接折弯真实背景，X 轴、Y 轴和滚动后的内容一起更新；没有场景复制、canvas 或 WebGL。许可声明见 [THIRD-PARTY.md](../THIRD-PARTY.md)。
+玻璃由 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 渲染。`src/lib/liquid-glass/` 是它的副本：位移图、三通道色散、rim 与层序都照原样，本地只加了几处接线——`radius` 把圆角写进渲染器读取的 inline style，`tint` 与 `frost` 让主题提供染色，挂载推迟到 load 后的空闲时间。不要在这里手写 `backdrop-filter`、filter 或位移图。
 
-结构：
-
-```html
-<div class="pane">
-  <div class="pane-surface">…</div>
-</div>
-```
-
-`.pane` 负责 G2 圆角、tint、透明 fallback、sheen 和阴影；`.pane-surface` 只放内容，不写底色、边框或阴影。`glass.ts` 只改写内联 `backdrop-filter`，不注入子层。`.btn-ghost` 用同一套小尺寸滤镜；主按钮是实色，不挂滤镜。
-
-- 圆角统一 `--r-card: 40px`；页头 80px 高，保留同一个 40px 半径，不用高度截断它。`corner-shape: squircle`（G2），不支持时退回 `border-radius`。
-- `depth` 是边缘厚度，`strength` 是位移强度；参数在 `glass-panes.ts` 和 `glass-buttons.ts`，不要在 `base.css` 里另写一套滤镜。
-- 玻璃默认 **不模糊**（`blur: 0`）；tint 很薄，随机字符行在玻璃下保持可见。旧版的重磨砂已移除。
-- 没有手写描边或绿色边缘；边缘是实际被折弯的背景、tint、顶部光和阴影。品牌绿只留在背景光和强调色里。
-- Chromium 渲染 data-URI 滤镜；Safari、Firefox 和 Chrome iOS 保留透明 tint、顶部光和阴影的 fallback。禁用 JS 时面板仍然完整。
-- 主题、tint、阴影在 `graphite.css`；结构在 `base.css`。
+结构是 `<LiquidGlass class="… pane" radius={40}>` 包住 `.pane-surface`：
 
 | 层 | 作用 |
 |---|---|
-| `background` | 冷灰或乳白的半透明底色 |
-| `backdrop-filter` | data-URI 位移滤镜；Chromium 折弯真实背景 |
-| `.pane::after` | 中性顶部高光与底边暗部 |
-| `box-shadow` | 外部阴影与顶部内光 |
+| `.lg-overlay-bg` | 主题叠层，色值取 `.pane` 的 `--lg-tint` |
+| `.lg-filter-layer > .glass-box` | 整块玻璃：`blur(1.5px) url(#位移图) blur(3px) brightness() saturate()` |
+| `.lg-frost` | 很浅的白色磨砂染色，色值取 `--glass-frost`，压在折射层之上 |
+| `.lg-content > .pane-surface` | 内容，压在玻璃之上 |
+| `box-shadow` | 面板投影，只有 elevation，不做镜面高光 |
 
-特性区是六张独立卡片，卡片之间留有间距。图标 chip 是平底色 + 1px 中性描边。
+- **圆角是 G2**：`.pane` 的 `corner-shape: squircle` 计算为 `superellipse(2)`；`.lg-filter-layer` 与 `.glass-box` 用 `corner-shape: inherit` 继承同一形状，位移图再按计算值画同一条超椭圆（指数 `2^k`，squircle 即 4）。圆角只写一处，`radius` 只把半径数值告诉位移图；胶囊按钮传 `999`，脚本按盒子高度夹紧。不支持 `corner-shape` 的浏览器退回圆形圆角，位移图同步退回 `rx/ry`。
+- **不给 `.pane` 加背景**：面板背景会画在折射层之上，把效果盖掉。底板色由库的叠层提供，面板色调在 `graphite.css` 的 `--glass-*-tint`。
+- `depth` 是边缘厚度，`strength` 是位移强度，`chromaticAberration` 是 R/B 分离；面板用 `depth 10 / strength 100 / cab 2`（库默认厚度，再厚边缘就像一圈厚玻璃），按钮用 `depth 8 / strength 80 / cab 2`。
+- `blur` 是磨砂量，面板和按钮都是 `3`：滤镜链是 `blur(1.5px)` → 位移 → `blur(3px)`，背景字符糊成雾面但仍认得出结构。再往上（5 以上）只剩毛玻璃，折射边缘也一起糊掉。
+- **滤镜整块盖住面板**：位移最多要从面板里侧拉 `strength` 像素的背景。试过把面板拆成“中心只模糊 + 四条 `depth` 宽的边缘条做位移”来省栅格化面积，边缘条窄于位移距离，没有可拉的背景，每条边都会露出一道深色硬边，所以退回了整块滤镜。
+- 磨砂之上还有一层 `.lg-frost`：很浅的白色染色，深色主题 `rgba(255,255,255,.045)`、浅色 `0.12`，让材质读起来是“乳白玻璃”而不是纯折射。它压在滤镜层之上，所以只会提亮，不会盖住弯折。
+- 面积越小，透镜要越弱：语言菜单是 `depth 6 / strength 40`。菜单只有 380px 高，`strength 100` 会把上方页头的高光拉进三分之一的面板，成一块发亮的斑。
+- 玻璃可以嵌套：CTA 面板里就放着两块玻璃按钮。挂载用 `:scope > .lg-filter-layer > .glass-box` 只找自己的层；写成普通 `querySelector` 会先命中内层，面板自己就永远没有滤镜。
+- 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。位移图按几何签名（尺寸、半径、深度、色散、圆角指数）缓存，不变化就不重建。
+- 滤镜在 load 后由 `requestIdleCallback` 挂载：首屏只有叠层和 rim，位移图在空闲时一次生成。
+- 禁用 JS 时面板退回 `--m3-surface-container` 实色 + 1px 描边；`prefers-reduced-transparency: reduce` 隐藏滤镜层并同样退回实色。
+- 按钮统一走 `src/components/GlassButton.astro`：同一个 `LiquidGlass`、同一套光学参数，`brand` 只是把中性叠层换成绿色叠层，链接本身不再画底色。`--glass-brand-tint` 故意接近不透明：绿色一旦调透，浅色主题会洗成薄荷绿，深色主题的标签对比也会掉。
+- JavaScript 在 `src/lib/liquid-glass/mount.ts`；主题、阴影与每块玻璃的色调在 `graphite.css`，结构在 `base.css`。
 
 ## 背景文字
 
-背景不是点阵图。`BackgroundText.astro` 生成 80 行随机多语言字符，奇偶行反向，整体旋转 **-20°**。字符池是拉丁与数字、CJK、日文假名、韩文、西里尔；每行 44–62 个字符，接续四份，渲染两份拷贝供 `-50%` 循环。
+背景不是点阵图。`BackgroundText.astro` 生成 80 行随机多语言字符，整体旋转 **-20°**。字符池是拉丁与数字、CJK、日文假名、韩文、西里尔；每行 44–62 个字符，接续四份。
 
 背景是纯文本行，没有 Canvas、运行时测量或第三方字体请求。`FieldSans` 由构建脚本把 126 个字形（Latin Extended、西里尔、CJK、假名、韩文）统一缩放并居中到 `1em` advance，再用 `.text-copy` 的 `0.636em` 字距形成 `1.636em` 方格。所有字符来自同一份 `FieldSans` 文件：拉丁/西里尔取自 Noto Sans，CJK/假名/韩文取自 Noto Sans KR。两个 Noto 切面合成同一个家族，不再使用 Smiley；若要求绝对单源，需要从字符池去掉 4 个 Noto CJK 不支持的拉丁扩展字符。
 
 字号 `1.375rem`（22px），行高 `1.15`，行高网格 `1.673em`，行距 `0.5rem`；字重 `600`，由 Field Sans 的 400 字面合成。场层 `inset: -70% -15%` 容纳 80 行，视口只看到一段。颜色 `--field-text`（约 0.06 不透明度）。
 
-- 只有 text-track 的 transform 动画，无限循环；`prefers-reduced-motion` 与 `?static=1` 会停下。不要加 `will-change`，否则 80 条行会各自成为大图层。
+- 背景漂移保留：`text-track` 的 transform 循环，`prefers-reduced-motion` 与 `?static=1` 会停下。它是玻璃的 backdrop，漂移会让带 `lens` 的表面每帧重算——所以只有三处小面积表面开了透镜，大面积面板只做磨砂。
+- 不要加 `will-change`，否则 80 条行会各自成为大图层。
 - Field Sans 只有约 10.6 KB，构建时预载并以 `font-display: block` 显示；没有远程字体等待或 fallback 换字。
-- 文本行位于玻璃后方，由 data-URI 位移滤镜折弯；不要再加回点阵。
+- 文本行位于玻璃后方，在带 `lens` 的表面被折弯、在磨砂表面被糊掉；不要再加回点阵。
 
 ## 动效
 

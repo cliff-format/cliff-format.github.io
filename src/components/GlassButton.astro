@@ -1,0 +1,33 @@
+---
+/**
+ * Glass button: the library's LiquidGlass with this site's button optics.
+ *
+ * Every button shares the pane material — same tint, brightness, saturate, and
+ * a thinner edge — so the ghost and the brand CTA read as one system. `brand`
+ * swaps the neutral tint for the green one.
+ */
+import LiquidGlass from "../lib/liquid-glass/LiquidGlass.astro";
+
+interface Props {
+  /** Brand-tinted call to action instead of the neutral glass. */
+  brand?: boolean;
+  class?: string;
+}
+
+const { brand, class: className } = Astro.props;
+const cls = ["lg-btn", brand ? "lg-btn-brand" : "", className ?? ""].filter(Boolean).join(" ");
+---
+
+<LiquidGlass
+  class={cls}
+  radius={999}
+  button
+  depth={8}
+  strength={80}
+  blur={3}
+  chromaticAberration={2}
+  brightness={brand ? 1.2 : 1.1}
+  saturate={1.5}
+>
+  <slot />
+</LiquidGlass>
