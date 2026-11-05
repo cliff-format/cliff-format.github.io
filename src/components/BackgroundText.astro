@@ -23,9 +23,9 @@ const random = seeded(0xc11ff);
 const rows = Array.from({ length: 80 }, (_, row) => {
   const length = 44 + (row % 4) * 6;
   const text = Array.from({ length }, () => GLYPHS[Math.floor(random() * GLYPHS.length)]).join("");
-  // Four repeats keep one copy wider than the 4K field; the track renders two
-  // copies so the -50% loop is seamless. The fixed-cell font gives every glyph
-  // the same advance, so plain text keeps the 1.636em grid without spans.
+  // Four repeats keep one copy wider than the 4K field. The fixed-cell font
+  // gives every glyph the same advance, so plain text keeps the 1.636em grid
+  // without spans.
   return text.repeat(4);
 });
 ---
