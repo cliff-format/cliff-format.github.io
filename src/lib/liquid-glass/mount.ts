@@ -83,19 +83,27 @@ function installFilter(fullMarkup: string, scrollMarkup: string): FilterEntry | 
   const scroll = parseFilterMarkup(scrollMarkup);
   if (!full || !scroll) return null;
   const id = `lg-filter-${++filterSeq}`;
-  const filter = document.importNode(full, true);
-  filter.id = id;
-  filterDefs.append(filter);
   const scales = [...full.querySelectorAll("feDisplacementMap")].map((map) =>
     Number(map.getAttribute("scale")),
   );
+  const baseScale = scales.length > 0 ? Math.min(...scales) : 0;
+  const filter = document.importNode(full, true);
+  filter.id = id;
+  // Insert at cab 0 so a filter arriving during the restore never flashes the
+  // target dispersion before the first animation frame.
+  if (filterMode === "full" && restoreFrame !== 0) {
+    for (const map of filter.querySelectorAll("feDisplacementMap")) {
+      map.setAttribute("scale", String(baseScale));
+    }
+  }
+  filterDefs.append(filter);
   const entry: FilterEntry = {
     id,
     filter,
     fullNodes: [...full.children].map((node) => node.cloneNode(true)),
     scrollNodes: [...scroll.children].map((node) => node.cloneNode(true)),
     targetScales: scales,
-    baseScale: scales.length > 0 ? Math.min(...scales) : 0,
+    baseScale,
     maps: [],
     users: new Set(),
     mode: "full",
@@ -105,12 +113,23 @@ function installFilter(fullMarkup: string, scrollMarkup: string): FilterEntry | 
     entry.mode = "scroll";
   } else {
     entry.maps = [...filter.querySelectorAll("feDisplacementMap")];
-    // A filter that arrives during the restore fade starts with the others.
-    if (restoreFrame !== 0) {
-      for (const map of entry.maps) map.setAttribute("scale", String(entry.baseScale));
-    }
   }
   return entry;
+}
+
+/** Clone the full graph with its displacement scales at cab 0. */
+function fullNodesAtBase(entry: FilterEntry): { nodes: Node[]; maps: Element[] } {
+  const nodes = entry.fullNodes.map((node) => node.cloneNode(true));
+  const maps: Element[] = [];
+  for (const node of nodes) {
+    if (node.nodeType !== 1) continue;
+    const element = node as Element;
+    if (element.tagName.toLowerCase() === "fedisplacementmap") {
+      element.setAttribute("scale", String(entry.baseScale));
+      maps.push(element);
+    }
+  }
+  return { nodes, maps };
 }
 
 /** Take a reference to a filter for this signature, installing it if needed. */
@@ -151,7 +170,9 @@ function animateRestore(): void {
   const started = performance.now();
   const step = (now: number): void => {
     const t = Math.min((now - started) / RESTORE_MS, 1);
-    const eased = 1 - Math.pow(1 - t, 3);
+    // Smoothstep spreads the color fringe over the whole 480 ms; an ease-out
+    // cubic put ~90% of the change in the first half and read as a snap.
+    const eased = t * t * (3 - 2 * t);
     for (const entry of filters.values()) {
       if (entry.mode !== "full" || entry.maps.length !== 3) continue;
       for (let i = 0; i < 3; i++) {
@@ -192,13 +213,15 @@ function setFilterMode(mode: FilterMode): void {
     return;
   }
 
-  // Restore the full graph at cab 0, then ease the dispersion back in.
+  // Restore the full graph at cab 0, then ease the dispersion back in. The
+  // base scales are set before the nodes enter the document, so the target
+  // dispersion is never painted for a frame.
   for (const entry of filters.values()) {
     if (entry.mode === "full") continue;
-    entry.filter.replaceChildren(...entry.fullNodes.map((node) => node.cloneNode(true)));
+    const { nodes, maps } = fullNodesAtBase(entry);
+    entry.filter.replaceChildren(...nodes);
     entry.mode = "full";
-    entry.maps = [...entry.filter.querySelectorAll("feDisplacementMap")];
-    for (const map of entry.maps) map.setAttribute("scale", String(entry.baseScale));
+    entry.maps = maps;
   }
   if (restoreFrame === 0) animateRestore();
 }

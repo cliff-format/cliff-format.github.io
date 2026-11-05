@@ -82,7 +82,7 @@
 - 玻璃可以嵌套：CTA 面板里就放着两块玻璃按钮。挂载用 `:scope > .lg-filter-layer > .glass-box` 只找自己的层；写成普通 `querySelector` 会先命中内层，面板自己就永远没有滤镜。
 - 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。滤镜按几何签名（尺寸、半径、深度、色散、圆角指数）缓存并共享；六张特性卡共用一个，尺寸变化时才重建。每个滤镜同时保存三通道静止图元与单通道滚动图元，滚动时原地替换，不换 id。
 - 滤镜在 load 后由 `requestIdleCallback` 逐块挂载（每次最多一块，100ms 超时兜底）：首屏只有叠层和 rim，避免一次生成全部滤镜的长任务。
-- **滚动只暂停色散**：滚动事件让已挂载的滤镜换成单通道位移图元，折射、`blur`、tint、frost 不变，R/B 色散暂停；滚动结束（`scrollend`）立即开始，三个位移 scale 在约 0.48s 内从 cab 0 渐入到 cab 2。cab 0 的三通道帧与单通道逐像素一致，所以恢复没有跳变。背景漂移不暂停。这样滚动时不会逐帧软件栅格化三次 `feDisplacementMap`，2560×1440 从 20–30fps 回到 40–130fps（首轮换滤镜后 100+）。
+- **滚动只暂停色散**：滚动事件让已挂载的滤镜换成单通道位移图元，折射、`blur`、tint、frost 不变，R/B 色散暂停；停止滚动约 140ms 后开始，三个位移 scale 在约 0.48s 内从 cab 0 渐入到 cab 2。cab 0 的三通道帧与单通道逐像素一致，所以恢复没有跳变。背景漂移不暂停。这样滚动时不会逐帧软件栅格化三次 `feDisplacementMap`，2560×1440 从 20–30fps 回到 40–130fps（首轮换滤镜后 100+）。
 - 禁用 JS 时面板退回 `--m3-surface-container` 实色 + 1px 描边；`prefers-reduced-transparency: reduce` 隐藏滤镜层并同样退回实色。
 - 按钮统一走 `src/components/GlassButton.astro`：同一个 `LiquidGlass`、同一套光学参数，`brand` 只是把中性叠层换成绿色叠层，链接本身不再画底色。`--glass-brand-tint` 故意接近不透明：绿色一旦调透，浅色主题会洗成薄荷绿，深色主题的标签对比也会掉。
 - JavaScript 在 `src/lib/liquid-glass/mount.ts`；主题、阴影与每块玻璃的色调在 `graphite.css`，结构在 `base.css`。

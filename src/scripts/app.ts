@@ -123,12 +123,12 @@ addEventListener("resize", repositionLangMenu, { passive: true });
 /* Scrolling changes every backdrop per frame. Tell the glass to swap to its
    one-pass filter twin for the duration of the scroll: the lens keeps bending,
    only the three-way dispersion pauses. The field keeps drifting. */
-const supportsScrollEnd = "onscrollend" in window;
-let fallbackTimer = 0;
+// A wheel emits one scroll event per tick and scrollend after each tick; a
+// short settle delay coalesces them so the 480ms fade is not cancelled by the
+// next tick. It still starts close enough to the stop to read as immediate.
+const STOP_DELAY = 140;
+let stopTimer = 0;
 let scrolling = false;
-// scrollend is immediate; the timer is only a safety net if the event is
-// missing. Browsers without scrollend keep the short debounce.
-const stopDelay = supportsScrollEnd ? 600 : 150;
 
 function setScrolling(next: boolean): void {
   if (scrolling === next) return;
@@ -140,27 +140,13 @@ addEventListener(
   "scroll",
   () => {
     setScrolling(true);
-    clearTimeout(fallbackTimer);
-    fallbackTimer = window.setTimeout(() => setScrolling(false), stopDelay);
+    clearTimeout(stopTimer);
+    stopTimer = window.setTimeout(() => setScrolling(false), STOP_DELAY);
     repositionLangMenu();
   },
   { passive: true },
 );
 
-if (supportsScrollEnd) {
-  addEventListener(
-    "scrollend",
-    (event) => {
-      // Nested scrollers (the language list) also emit scrollend; only the
-      // document ending its scroll ends the glass transition.
-      if (event.target === document) {
-        clearTimeout(fallbackTimer);
-        setScrolling(false);
-      }
-    },
-    { passive: true },
-  );
-}
 
 /* Copy-to-clipboard for the install command in the footer. */
 for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
