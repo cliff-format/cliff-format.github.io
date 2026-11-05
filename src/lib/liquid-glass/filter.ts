@@ -139,7 +139,9 @@ export const getDisplacementMap = ({
 </svg>`;
 
 /** The filter as SVG markup. The mount installs it into the document: a data
-    URI is re-parsed every time the backdrop is sampled. */
+    URI is re-parsed every time the backdrop is sampled. With zero chromatic
+    aberration the filter collapses to one displacement pass; the scroll
+    material uses that form to keep the lens without the dispersion cost. */
 export const getDisplacementFilterMarkup = ({
   height,
   width,
@@ -148,13 +150,21 @@ export const getDisplacementFilterMarkup = ({
   strength = 100,
   chromaticAberration = 0,
   cornerExponent = 2,
-}: DisplacementOptions) =>
-  `<svg height="${height}" width="${width}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <filter id="displace" color-interpolation-filters="sRGB">
-            <feImage x="0" y="0" height="${height}" width="${width}" href="data:image/svg+xml;utf8,${encodeURIComponent(
-              getDisplacementMap({ height, width, radius, depth, cornerExponent }),
-            )}" result="displacementMap" />
+}: DisplacementOptions) => {
+  const image = `<feImage x="0" y="0" height="${height}" width="${width}" href="data:image/svg+xml;utf8,${encodeURIComponent(
+    getDisplacementMap({ height, width, radius, depth, cornerExponent }),
+  )}" result="displacementMap" />`;
+
+  const singlePass = `${image}
+            <feDisplacementMap
+                in="SourceGraphic"
+                in2="displacementMap"
+                scale="${strength}"
+                xChannelSelector="R"
+                yChannelSelector="G"
+            />`;
+
+  const dispersed = `${image}
             <feDisplacementMap
                 transform-origin="center"
                 in="SourceGraphic"
@@ -202,10 +212,16 @@ export const getDisplacementFilterMarkup = ({
                 result="displacedB"
                         />
               <feBlend in="displacedR" in2="displacedG" mode="screen"/>
-              <feBlend in2="displacedB" mode="screen"/>
+              <feBlend in2="displacedB" mode="screen"/>`;
+
+  return `<svg height="${height}" width="${width}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="displace" color-interpolation-filters="sRGB">
+            ${chromaticAberration > 0 ? dispersed : singlePass}
         </filter>
     </defs>
 </svg>`;
+};
 
 /** Upstream's data-URI form, kept for callers that cannot share a filter. */
 export const getDisplacementFilter = (options: DisplacementOptions) =>

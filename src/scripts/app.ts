@@ -119,7 +119,29 @@ langMenu?.addEventListener("toggle", () => {
 });
 langButton?.addEventListener("click", () => requestAnimationFrame(repositionLangMenu));
 addEventListener("resize", repositionLangMenu, { passive: true });
-addEventListener("scroll", repositionLangMenu, { passive: true });
+
+/* Scrolling changes every backdrop per frame. Tell the glass to swap to its
+   one-pass filter twin for the duration of the scroll: the lens keeps bending,
+   only the three-way dispersion pauses. The field keeps drifting. */
+let scrollTimer = 0;
+let scrolling = false;
+
+function setScrolling(next: boolean): void {
+  if (scrolling === next) return;
+  scrolling = next;
+  document.dispatchEvent(new CustomEvent("lg-scroll", { detail: next }));
+}
+
+addEventListener(
+  "scroll",
+  () => {
+    setScrolling(true);
+    clearTimeout(scrollTimer);
+    scrollTimer = window.setTimeout(() => setScrolling(false), 1000);
+    repositionLangMenu();
+  },
+  { passive: true },
+);
 
 /* Copy-to-clipboard for the install command in the footer. */
 for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {

@@ -46,42 +46,69 @@ const filterDefs = (() => {
 
 let filterSeq = 0;
 
+type FilterMode = "full" | "scroll";
+
 type FilterEntry = {
   id: string;
+  filter: SVGFilterElement;
+  /** The three-pass primitives and their one-pass scroll twin. */
+  fullNodes: Node[];
+  scrollNodes: Node[];
   /** Boxes that reference this filter; the last one releases it. */
   users: Set<HTMLElement>;
+  mode: FilterMode;
 };
 
 /** Filters keyed by the geometry that produced them. */
 const filters = new Map<string, FilterEntry>();
+let filterMode: FilterMode = "full";
 
-/** Install a filter and return its id, or "" when the markup is malformed. */
-function installFilter(markup: string): string {
+/** Parse one <filter>; an empty node is what malformed markup degrades to. */
+function parseFilterMarkup(markup: string): SVGFilterElement | null {
   const parsed = new DOMParser().parseFromString(markup, "image/svg+xml").querySelector("filter");
-  // An empty <filter> is what malformed markup degrades to. Treat it as a
-  // failure instead of silently dropping the lens.
-  if (!parsed || parsed.children.length === 0) return "";
+  if (!parsed || parsed.children.length === 0) return null;
+  return parsed as SVGFilterElement;
+}
+
+/** Install the rest and scroll forms of one filter geometry. */
+function installFilter(fullMarkup: string, scrollMarkup: string): FilterEntry | null {
+  const full = parseFilterMarkup(fullMarkup);
+  const scroll = parseFilterMarkup(scrollMarkup);
+  if (!full || !scroll) return null;
   const id = `lg-filter-${++filterSeq}`;
-  const filter = document.importNode(parsed, true);
+  const filter = document.importNode(full, true);
   filter.id = id;
   filterDefs.append(filter);
-  return id;
+  const entry: FilterEntry = {
+    id,
+    filter,
+    fullNodes: [...full.children].map((node) => node.cloneNode(true)),
+    scrollNodes: [...scroll.children].map((node) => node.cloneNode(true)),
+    users: new Set(),
+    mode: "full",
+  };
+  if (filterMode === "scroll") {
+    filter.replaceChildren(...entry.scrollNodes.map((node) => node.cloneNode(true)));
+    entry.mode = "scroll";
+  }
+  return entry;
 }
 
 /** Take a reference to a filter for this signature, installing it if needed. */
-function acquireFilter(box: HTMLElement, signature: string, markup: string): string {
+function acquireFilter(box: HTMLElement, signature: string, fullMarkup: string, scrollMarkup: string): string {
   const existing = filters.get(signature);
   if (existing && document.getElementById(existing.id)) {
     existing.users.add(box);
     return existing.id;
   }
-  const id = installFilter(markup);
-  if (!id) return "";
-  filters.set(signature, { id, users: new Set([box]) });
-  return id;
+  const entry = installFilter(fullMarkup, scrollMarkup);
+  if (!entry) return "";
+  entry.users.add(box);
+  filters.set(signature, entry);
+  return entry.id;
 }
 
-/** Drop this box's reference and remove the filter when nobody uses it. */
+/** Drop this box's reference; remove the filter when nobody uses it. */
 function releaseFilter(box: HTMLElement): void {
   const signature = box.dataset.filterSignature;
   if (signature) {
@@ -89,7 +116,7 @@ function releaseFilter(box: HTMLElement): void {
     if (entry) {
       entry.users.delete(box);
       if (entry.users.size === 0) {
-        document.getElementById(entry.id)?.remove();
+        entry.filter.remove();
         filters.delete(signature);
       }
     }
@@ -98,9 +125,29 @@ function releaseFilter(box: HTMLElement): void {
   delete box.dataset.filterId;
 }
 
+/** Swap every installed filter between the rest and scroll forms. */
+function setFilterMode(mode: FilterMode): void {
+  filterMode = mode;
+  for (const entry of filters.values()) {
+    if (entry.mode === mode) continue;
+    const nodes = mode === "scroll" ? entry.scrollNodes : entry.fullNodes;
+    entry.filter.replaceChildren(...nodes.map((node) => node.cloneNode(true)));
+    entry.mode = mode;
+  }
+}
+
+document.addEventListener("lg-scroll", (event) => {
+  setFilterMode((event as CustomEvent<boolean>).detail ? "scroll" : "full");
+});
+
 function setBackdrop(el: HTMLElement, value: string): void {
   el.style.backdropFilter = value;
   el.style.setProperty("-webkit-backdrop-filter", value);
+}
+
+/** The backdrop chain around one displacement filter. */
+function backdropValue(id: string, blur: number, brightness: number, saturate: number): string {
+  return `blur(${blur / 2}px) url(#${id}) blur(${blur}px) brightness(${brightness}) saturate(${saturate})`;
 }
 
 function redrawGlass(glass: HTMLElement): void {
@@ -154,10 +201,14 @@ function redrawGlass(glass: HTMLElement): void {
     // Let go of the previous geometry before taking the next one; a shared
     // filter survives while any other box still references it.
     releaseFilter(box);
+    // Install both forms together: the three-pass rest material and the
+    // one-pass scroll twin. The twins share the filter id and only swap their
+    // primitives, so the compositor can keep the pane's layer.
     const installed = acquireFilter(
       box,
       signature,
       getDisplacementFilterMarkup({ height, width, radius, depth, strength, chromaticAberration, cornerExponent }),
+      getDisplacementFilterMarkup({ height, width, radius, depth, strength, chromaticAberration: 0, cornerExponent }),
     );
     if (!installed) {
       // The lens failed to install; keep the blur so the pane still reads as glass.
@@ -168,10 +219,9 @@ function redrawGlass(glass: HTMLElement): void {
     box.dataset.filterId = installed;
   }
 
-  setBackdrop(
-    box,
-    `blur(${blurValue / 2}px) url(#${box.dataset.filterId}) blur(${blurValue}px) brightness(${brightness}) saturate(${saturate})`,
-  );
+  const filterId = box.dataset.filterId;
+  if (!filterId) return;
+  setBackdrop(box, backdropValue(filterId, blurValue, brightness, saturate));
 }
 
 const glasses = (): HTMLElement[] => [...document.querySelectorAll<HTMLElement>(".liquid-glass")];
