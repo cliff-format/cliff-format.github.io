@@ -51,12 +51,19 @@ python scripts/noto-unicode-range.py     # 同步 Noto Sans SC 的 unicode-range
 
 ## 性能
 
-首屏约 950 个 DOM 节点：每块玻璃两个空 div（滤镜层、磨砂层），外加文档里一份共享的 `<svg><defs>`（每块玻璃一个 `<filter>`）——旧实现为每块玻璃克隆一份背景，挂载后约 5,000 个节点。本地基础字体是 3 个（Smiley、JetBrains 400、Field Sans，合计约 84 KB），韩语和阿拉伯语页面再加自己的正文字体。背景是纯文本行 + 固定方格 Field Sans，CSS 只用 transform 做循环；没有 Canvas、运行时字形测量或第三方字体请求。不要恢复逐字 `<span>`。玻璃滤镜是增强项，在 `load` 后由 `requestIdleCallback` 生成，不要改回首屏同步初始化。`backdrop-filter: url()` 在 backdrop 移动时由软件栅格化，代价与滤镜面积成正比；试过把面板拆成“中心模糊 + 四条边缘条做位移”来缩小面积，但位移最多要拉 `strength` 像素的背景，比它窄的条带会露出深色硬边，所以维持整块滤镜。
+首屏约 890 个 DOM 节点：每块玻璃两个空 div（滤镜层、磨砂层），外加文档里一份共享的 `<svg><defs>`。滤镜按几何签名缓存并共享：14 个带滤镜的 `.glass-box` 只用 8 个 `<filter>`（六张特性卡共用一个），旧实现为每块玻璃克隆一份背景，挂载后约 5,000 个节点。本地基础字体是 3 个（Smiley、JetBrains 400、Field Sans，合计约 84 KB），韩语和阿拉伯语页面再加自己的正文字体。背景是纯文本行 + 固定方格 Field Sans，CSS 只用 transform 做循环；没有 Canvas、运行时字形测量或第三方字体请求。不要恢复逐字 `<span>`。
+
+背景漂移按 20 Hz 采样：`text-track` 仍是同一条 transform 循环，但 `steps()` 每 50ms 才前进一步。最快可见行每步小于 1.5px，读起来仍是连续漂移；线性 60fps 漂移会让每块玻璃的 backdrop 每帧重算。玻璃的光学参数与滤镜面积不变。
+
+玻璃滤镜是增强项：`load` 后由 `requestIdleCallback` 逐块生成（每次最多一块，100ms 超时兜底），不要改回首屏同步初始化或一次生成全部。`backdrop-filter: url()` 在 backdrop 移动时由软件栅格化，代价与滤镜面积成正比；试过把面板拆成“中心模糊 + 四条边缘条做位移”来缩小面积，但位移最多要拉 `strength` 像素的背景，比它窄的条带会露出深色硬边，所以维持整块滤镜。
 
 ```bash
 CPU=4 node scripts/perf-probe.mjs        # 节点数、DCL、LCP、字体与长任务
 CPU=4 ROUTE="/?t=dark" node scripts/perf-probe.mjs
+PORT=4174 node scripts/perf-idle.mjs     # 静置 CPU；需要已运行 preview
 ```
+
+静置 CPU（1440×900，headless Edge）：约 1.2 → 0.5 核。主要来源是漂移采样；滤镜共享把 `<filter>` 从 14 个降到 8 个。
 
 ## 本地化
 

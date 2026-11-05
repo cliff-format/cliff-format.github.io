@@ -80,8 +80,8 @@
 - 磨砂之上还有一层 `.lg-frost`：很浅的白色染色，深色主题 `rgba(255,255,255,.045)`、浅色 `0.12`，让材质读起来是“乳白玻璃”而不是纯折射。它压在滤镜层之上，所以只会提亮，不会盖住弯折。
 - 面积越小，透镜要越弱：语言菜单是 `depth 6 / strength 40`。菜单只有 380px 高，`strength 100` 会把上方页头的高光拉进三分之一的面板，成一块发亮的斑。
 - 玻璃可以嵌套：CTA 面板里就放着两块玻璃按钮。挂载用 `:scope > .lg-filter-layer > .glass-box` 只找自己的层；写成普通 `querySelector` 会先命中内层，面板自己就永远没有滤镜。
-- 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。位移图按几何签名（尺寸、半径、深度、色散、圆角指数）缓存，不变化就不重建。
-- 滤镜在 load 后由 `requestIdleCallback` 挂载：首屏只有叠层和 rim，位移图在空闲时一次生成。
+- 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。滤镜按几何签名（尺寸、半径、深度、色散、圆角指数）缓存并共享；六张特性卡共用一个，尺寸变化时才重建。
+- 滤镜在 load 后由 `requestIdleCallback` 逐块挂载（每次最多一块，100ms 超时兜底）：首屏只有叠层和 rim，避免一次生成全部滤镜的长任务。
 - 禁用 JS 时面板退回 `--m3-surface-container` 实色 + 1px 描边；`prefers-reduced-transparency: reduce` 隐藏滤镜层并同样退回实色。
 - 按钮统一走 `src/components/GlassButton.astro`：同一个 `LiquidGlass`、同一套光学参数，`brand` 只是把中性叠层换成绿色叠层，链接本身不再画底色。`--glass-brand-tint` 故意接近不透明：绿色一旦调透，浅色主题会洗成薄荷绿，深色主题的标签对比也会掉。
 - JavaScript 在 `src/lib/liquid-glass/mount.ts`；主题、阴影与每块玻璃的色调在 `graphite.css`，结构在 `base.css`。
@@ -94,10 +94,10 @@
 
 字号 `1.375rem`（22px），行高 `1.15`，行高网格 `1.673em`，行距 `0.5rem`；字重 `600`，由 Field Sans 的 400 字面合成。场层 `inset: -70% -15%` 容纳 80 行，视口只看到一段。颜色 `--field-text`（约 0.06 不透明度）。
 
-- 背景漂移保留：`text-track` 的 transform 循环，`prefers-reduced-motion` 与 `?static=1` 会停下。它是玻璃的 backdrop，漂移会让带 `lens` 的表面每帧重算——所以只有三处小面积表面开了透镜，大面积面板只做磨砂。
+- 背景漂移保留：`text-track` 的 transform 循环，`prefers-reduced-motion` 与 `?static=1` 会停下。它是玻璃的 backdrop，线性 60fps 漂移会让每块玻璃每帧重算；因此用 `steps()` 按 20 Hz 采样，最快可见行每步小于 1.5px，光学参数不变。`DRIFT_FPS` 在 `BackgroundText.astro`，`--drift-steps` 在 `graphite.css`。
 - 不要加 `will-change`，否则 80 条行会各自成为大图层。
 - Field Sans 只有约 10.6 KB，构建时预载并以 `font-display: block` 显示；没有远程字体等待或 fallback 换字。
-- 文本行位于玻璃后方，在带 `lens` 的表面被折弯、在磨砂表面被糊掉；不要再加回点阵。
+- 文本行位于玻璃后方，在滤镜层被折弯、被磨砂糊掉；不要再加回点阵。
 
 ## 动效
 

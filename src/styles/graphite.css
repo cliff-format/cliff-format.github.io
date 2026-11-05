@@ -205,7 +205,13 @@ html[data-theme="light"] {
 .text-track {
   display: flex;
   width: max-content;
-  animation: field-left var(--dur, 80s) linear infinite;
+  /* Twenty steps a second: the fastest visible row moves under 1.5 px per
+     step, which reads as continuous. A linear 60 fps drift would invalidate
+     the backdrop of every glass pane on every frame. */
+  animation-name: field-left;
+  animation-duration: var(--dur, 80s);
+  animation-timing-function: steps(var(--drift-steps, 1600), end);
+  animation-iteration-count: infinite;
 }
 .text-row:nth-child(even) .text-track {
   animation-name: field-right;

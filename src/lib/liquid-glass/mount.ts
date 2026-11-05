@@ -7,6 +7,10 @@
 // - The filter is installed into the document instead of a data URI. A
 //   same-document filter stays parsed while the backdrop keeps moving, which
 //   measured ~40% cheaper per frame than re-parsing the URI.
+// - Filters are shared by geometry and built one per idle callback. Six
+//   feature cards use one filter instead of six, and the first paint never
+//   parses every filter in a single long task.
+// - One ResizeObserver re-measures every pane after fonts or layout change.
 // - The radius is clamped to the box (pills declare 999px), and the corner
 //   shape follows the computed G2 corner.
 //
@@ -42,19 +46,56 @@ const filterDefs = (() => {
 
 let filterSeq = 0;
 
-/** Install (or refresh) this element's filter and return its id. */
-function installFilter(el: HTMLElement, markup: string): string {
+type FilterEntry = {
+  id: string;
+  /** Boxes that reference this filter; the last one releases it. */
+  users: Set<HTMLElement>;
+};
+
+/** Filters keyed by the geometry that produced them. */
+const filters = new Map<string, FilterEntry>();
+
+/** Install a filter and return its id, or "" when the markup is malformed. */
+function installFilter(markup: string): string {
   const parsed = new DOMParser().parseFromString(markup, "image/svg+xml").querySelector("filter");
   // An empty <filter> is what malformed markup degrades to. Treat it as a
   // failure instead of silently dropping the lens.
   if (!parsed || parsed.children.length === 0) return "";
-  const id = el.dataset.filterId ?? `lg-filter-${++filterSeq}`;
-  el.dataset.filterId = id;
+  const id = `lg-filter-${++filterSeq}`;
   const filter = document.importNode(parsed, true);
   filter.id = id;
-  document.getElementById(id)?.remove();
   filterDefs.append(filter);
   return id;
+}
+
+/** Take a reference to a filter for this signature, installing it if needed. */
+function acquireFilter(box: HTMLElement, signature: string, markup: string): string {
+  const existing = filters.get(signature);
+  if (existing && document.getElementById(existing.id)) {
+    existing.users.add(box);
+    return existing.id;
+  }
+  const id = installFilter(markup);
+  if (!id) return "";
+  filters.set(signature, { id, users: new Set([box]) });
+  return id;
+}
+
+/** Drop this box's reference and remove the filter when nobody uses it. */
+function releaseFilter(box: HTMLElement): void {
+  const signature = box.dataset.filterSignature;
+  if (signature) {
+    const entry = filters.get(signature);
+    if (entry) {
+      entry.users.delete(box);
+      if (entry.users.size === 0) {
+        document.getElementById(entry.id)?.remove();
+        filters.delete(signature);
+      }
+    }
+  }
+  delete box.dataset.filterSignature;
+  delete box.dataset.filterId;
 }
 
 function setBackdrop(el: HTMLElement, value: string): void {
@@ -97,28 +138,34 @@ function redrawGlass(glass: HTMLElement): void {
 
   if (!supportsBackdropFilterUrl) {
     // Safari without url() filters: keep a frosted pane rather than a flat one.
+    releaseFilter(box);
     setBackdrop(box, `blur(${width / 10}px) saturate(180%)`);
     return;
   }
 
   if (reducedTransparency.matches) {
+    releaseFilter(box);
     setBackdrop(box, "none");
     return;
   }
 
   const signature = `${width}x${height}|${radius}|${depth}|${strength}|${chromaticAberration}|${cornerExponent}`;
   if (box.dataset.filterSignature !== signature) {
-    const installed = installFilter(
+    // Let go of the previous geometry before taking the next one; a shared
+    // filter survives while any other box still references it.
+    releaseFilter(box);
+    const installed = acquireFilter(
       box,
+      signature,
       getDisplacementFilterMarkup({ height, width, radius, depth, strength, chromaticAberration, cornerExponent }),
     );
     if (!installed) {
       // The lens failed to install; keep the blur so the pane still reads as glass.
-      box.dataset.filterSignature = "";
       setBackdrop(box, `blur(${blurValue / 2}px) blur(${blurValue}px) brightness(${brightness}) saturate(${saturate})`);
       return;
     }
     box.dataset.filterSignature = signature;
+    box.dataset.filterId = installed;
   }
 
   setBackdrop(
@@ -129,26 +176,60 @@ function redrawGlass(glass: HTMLElement): void {
 
 const glasses = (): HTMLElement[] => [...document.querySelectorAll<HTMLElement>(".liquid-glass")];
 
-function initGlass(): void {
-  for (const glass of glasses()) {
-    if (glass.dataset.glassReady === "1") continue;
-    glass.dataset.glassReady = "1";
-    redrawGlass(glass);
-    // Fonts, language switches, and the popover all resize the pane.
-    new ResizeObserver(() => redrawGlass(glass)).observe(glass);
+/* One observer for every pane: resizing the window must not run a separate
+   layout pass per glass. The next frame coalesces a font swap, a media query,
+   and the language popover into one batch. */
+const pendingRedraw = new Set<HTMLElement>();
+let redrawFrame = 0;
+
+function scheduleRedraw(glass: HTMLElement): void {
+  pendingRedraw.add(glass);
+  if (redrawFrame !== 0) return;
+  redrawFrame = requestAnimationFrame(() => {
+    redrawFrame = 0;
+    const batch = [...pendingRedraw];
+    pendingRedraw.clear();
+    for (const pane of batch) redrawGlass(pane);
+  });
+}
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.target instanceof HTMLElement) scheduleRedraw(entry.target);
   }
+});
+
+function initGlass(glass: HTMLElement): void {
+  if (glass.dataset.glassReady === "1") return;
+  glass.dataset.glassReady = "1";
+  redrawGlass(glass);
+  resizeObserver.observe(glass);
 }
 
 reducedTransparency.addEventListener("change", () => {
-  for (const glass of glasses()) redrawGlass(glass);
+  for (const glass of glasses()) scheduleRedraw(glass);
 });
 
 /* Glass is an enhancement: the first paint keeps the CSS tint and the rim, and
-   the filters rasterize once the page is idle. Building the filters on
+   the filters rasterize once the page is idle. One filter per idle callback
+   keeps that work out of a single long task; building all of them on
    DOMContentLoaded pushed that event by ~500ms under 4x throttling. */
 function scheduleGlass(): void {
-  if ("requestIdleCallback" in window) requestIdleCallback(initGlass, { timeout: 1000 });
-  else setTimeout(initGlass, 200);
+  const queue = glasses().filter((glass) => glass.dataset.glassReady !== "1");
+  let index = 0;
+
+  const run = (): void => {
+    const glass = queue[index++];
+    if (glass) initGlass(glass);
+    if (index < queue.length) schedule(run);
+  };
+
+  const schedule = (callback: () => void): void => {
+    if ("requestIdleCallback" in window) requestIdleCallback(callback, { timeout: 100 });
+    else setTimeout(callback, 50);
+  };
+
+  if (queue.length > 0) schedule(run);
 }
 
 if (document.readyState === "complete") scheduleGlass();

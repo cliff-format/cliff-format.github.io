@@ -19,6 +19,11 @@ function seeded(seed: number): () => number {
   };
 }
 
+// The field moves 8.5–29 px/s. Twenty samples a second keep the fastest
+// visible row under 1.5 px per step and stop the glass backdrop from
+// re-rasterizing on every display frame; the drift still reads as continuous.
+const DRIFT_FPS = 20;
+
 const random = seeded(0xc11ff);
 const rows = Array.from({ length: 80 }, (_, row) => {
   const length = 44 + (row % 4) * 6;
@@ -32,13 +37,16 @@ const rows = Array.from({ length: 80 }, (_, row) => {
 
 <div class="bd-text" aria-hidden="true" dir="ltr">
   {
-    rows.map((text, index) => (
-      <div class="text-row" style={`--dur:${260 + index * 10}s`}>
-        <div class="text-track">
-          <span class="text-copy">{text}</span>
-          <span class="text-copy" aria-hidden="true">{text}</span>
+    rows.map((text, index) => {
+      const duration = 260 + index * 10;
+      return (
+        <div class="text-row" style={`--dur:${duration}s;--drift-steps:${duration * DRIFT_FPS}`}>
+          <div class="text-track">
+            <span class="text-copy">{text}</span>
+            <span class="text-copy" aria-hidden="true">{text}</span>
+          </div>
         </div>
-      </div>
-    ))
+      );
+    })
   }
 </div>
