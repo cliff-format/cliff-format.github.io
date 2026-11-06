@@ -13,6 +13,8 @@
 // - One ResizeObserver re-measures every pane after fonts or layout change.
 // - The radius is clamped to the box (pills declare 999px), and the corner
 //   shape follows the computed G2 corner.
+// - Chromatic dispersion is disabled in filter.ts, so every filter is the
+//   single-pass lens and scrolling no longer swaps filter graphs.
 //
 // The filter covers the whole pane. Splitting the pane into a blurred centre
 // and thin edge strips does not work: the displacement pulls up to `strength`
@@ -46,29 +48,15 @@ const filterDefs = (() => {
 
 let filterSeq = 0;
 
-type FilterMode = "full" | "scroll";
-
 type FilterEntry = {
   id: string;
   filter: SVGFilterElement;
-  /** The three-pass primitives and their one-pass scroll twin. */
-  fullNodes: Node[];
-  scrollNodes: Node[];
-  /** Target scales of the three displacement passes, and their cab-0 value. */
-  targetScales: number[];
-  baseScale: number;
-  /** The displacement maps currently mounted in the full form. */
-  maps: Element[];
   /** Boxes that reference this filter; the last one releases it. */
   users: Set<HTMLElement>;
-  mode: FilterMode;
 };
 
 /** Filters keyed by the geometry that produced them. */
 const filters = new Map<string, FilterEntry>();
-let filterMode: FilterMode = "full";
-let restoreFrame = 0;
-const RESTORE_MS = 480;
 
 /** Parse one <filter>; an empty node is what malformed markup degrades to. */
 function parseFilterMarkup(markup: string): SVGFilterElement | null {
@@ -77,69 +65,25 @@ function parseFilterMarkup(markup: string): SVGFilterElement | null {
   return parsed as SVGFilterElement;
 }
 
-/** Install the rest and scroll forms of one filter geometry. */
-function installFilter(fullMarkup: string, scrollMarkup: string): FilterEntry | null {
-  const full = parseFilterMarkup(fullMarkup);
-  const scroll = parseFilterMarkup(scrollMarkup);
-  if (!full || !scroll) return null;
+/** Install one filter geometry. */
+function installFilter(markup: string): FilterEntry | null {
+  const parsed = parseFilterMarkup(markup);
+  if (!parsed) return null;
   const id = `lg-filter-${++filterSeq}`;
-  const scales = [...full.querySelectorAll("feDisplacementMap")].map((map) =>
-    Number(map.getAttribute("scale")),
-  );
-  const baseScale = scales.length > 0 ? Math.min(...scales) : 0;
-  const filter = document.importNode(full, true);
+  const filter = document.importNode(parsed, true);
   filter.id = id;
-  // Insert at cab 0 so a filter arriving during the restore never flashes the
-  // target dispersion before the first animation frame.
-  if (filterMode === "full" && restoreFrame !== 0) {
-    for (const map of filter.querySelectorAll("feDisplacementMap")) {
-      map.setAttribute("scale", String(baseScale));
-    }
-  }
   filterDefs.append(filter);
-  const entry: FilterEntry = {
-    id,
-    filter,
-    fullNodes: [...full.children].map((node) => node.cloneNode(true)),
-    scrollNodes: [...scroll.children].map((node) => node.cloneNode(true)),
-    targetScales: scales,
-    baseScale,
-    maps: [],
-    users: new Set(),
-    mode: "full",
-  };
-  if (filterMode === "scroll") {
-    filter.replaceChildren(...entry.scrollNodes.map((node) => node.cloneNode(true)));
-    entry.mode = "scroll";
-  } else {
-    entry.maps = [...filter.querySelectorAll("feDisplacementMap")];
-  }
-  return entry;
-}
-
-/** Clone the full graph with its displacement scales at cab 0. */
-function fullNodesAtBase(entry: FilterEntry): { nodes: Node[]; maps: Element[] } {
-  const nodes = entry.fullNodes.map((node) => node.cloneNode(true));
-  const maps: Element[] = [];
-  for (const node of nodes) {
-    if (node.nodeType !== 1) continue;
-    const element = node as Element;
-    if (element.tagName.toLowerCase() === "fedisplacementmap") {
-      element.setAttribute("scale", String(entry.baseScale));
-      maps.push(element);
-    }
-  }
-  return { nodes, maps };
+  return { id, filter, users: new Set() };
 }
 
 /** Take a reference to a filter for this signature, installing it if needed. */
-function acquireFilter(box: HTMLElement, signature: string, fullMarkup: string, scrollMarkup: string): string {
+function acquireFilter(box: HTMLElement, signature: string, markup: string): string {
   const existing = filters.get(signature);
   if (existing && document.getElementById(existing.id)) {
     existing.users.add(box);
     return existing.id;
   }
-  const entry = installFilter(fullMarkup, scrollMarkup);
+  const entry = installFilter(markup);
   if (!entry) return "";
   entry.users.add(box);
   filters.set(signature, entry);
@@ -162,73 +106,6 @@ function releaseFilter(box: HTMLElement): void {
   delete box.dataset.filterSignature;
   delete box.dataset.filterId;
 }
-
-/** Fade the three dispersion scales in after the scroll ends. A cab-0
-    three-pass filter renders exactly like the one-pass scroll form, so the
-    transition starts without a pop and only the R/B fringe fades in. */
-function animateRestore(): void {
-  const started = performance.now();
-  const step = (now: number): void => {
-    const t = Math.min((now - started) / RESTORE_MS, 1);
-    // Smoothstep spreads the color fringe over the whole 480 ms; an ease-out
-    // cubic put ~90% of the change in the first half and read as a snap.
-    const eased = t * t * (3 - 2 * t);
-    for (const entry of filters.values()) {
-      if (entry.mode !== "full" || entry.maps.length !== 3) continue;
-      for (let i = 0; i < 3; i++) {
-        const target = entry.targetScales[i] ?? entry.baseScale;
-        const scale = entry.baseScale + (target - entry.baseScale) * eased;
-        entry.maps[i].setAttribute("scale", scale.toFixed(2));
-      }
-    }
-    if (t < 1) {
-      restoreFrame = requestAnimationFrame(step);
-      return;
-    }
-    restoreFrame = 0;
-    for (const entry of filters.values()) {
-      if (entry.mode !== "full") continue;
-      entry.maps.forEach((map, i) => map.setAttribute("scale", String(entry.targetScales[i] ?? entry.baseScale)));
-    }
-  };
-  restoreFrame = requestAnimationFrame(step);
-}
-
-/** Swap every installed filter between the rest and scroll forms. */
-function setFilterMode(mode: FilterMode): void {
-  if (filterMode === mode) return;
-  filterMode = mode;
-
-  if (mode === "scroll") {
-    if (restoreFrame !== 0) {
-      cancelAnimationFrame(restoreFrame);
-      restoreFrame = 0;
-    }
-    for (const entry of filters.values()) {
-      if (entry.mode === "scroll") continue;
-      entry.filter.replaceChildren(...entry.scrollNodes.map((node) => node.cloneNode(true)));
-      entry.mode = "scroll";
-      entry.maps = [];
-    }
-    return;
-  }
-
-  // Restore the full graph at cab 0, then ease the dispersion back in. The
-  // base scales are set before the nodes enter the document, so the target
-  // dispersion is never painted for a frame.
-  for (const entry of filters.values()) {
-    if (entry.mode === "full") continue;
-    const { nodes, maps } = fullNodesAtBase(entry);
-    entry.filter.replaceChildren(...nodes);
-    entry.mode = "full";
-    entry.maps = maps;
-  }
-  if (restoreFrame === 0) animateRestore();
-}
-
-document.addEventListener("lg-scroll", (event) => {
-  setFilterMode((event as CustomEvent<boolean>).detail ? "scroll" : "full");
-});
 
 function setBackdrop(el: HTMLElement, value: string): void {
   el.style.backdropFilter = value;
@@ -254,6 +131,8 @@ function redrawGlass(glass: HTMLElement): void {
   if (width < 1 || height < 1) return;
 
   const blurValue = Number.parseFloat(box.dataset.blur ?? "0");
+  // Kept for the commented-out dispersion graph; the glass components no
+  // longer pass the prop, so this reads 0.
   const chromaticAberration = Number.parseFloat(box.dataset.cab ?? "0");
   const depth = Number.parseFloat(box.dataset.depth ?? "10");
   const strength = Number.parseFloat(box.dataset.strength ?? "100");
@@ -291,14 +170,10 @@ function redrawGlass(glass: HTMLElement): void {
     // Let go of the previous geometry before taking the next one; a shared
     // filter survives while any other box still references it.
     releaseFilter(box);
-    // Install both forms together: the three-pass rest material and the
-    // one-pass scroll twin. The twins share the filter id and only swap their
-    // primitives, so the compositor can keep the pane's layer.
     const installed = acquireFilter(
       box,
       signature,
       getDisplacementFilterMarkup({ height, width, radius, depth, strength, chromaticAberration, cornerExponent }),
-      getDisplacementFilterMarkup({ height, width, radius, depth, strength, chromaticAberration: 0, cornerExponent }),
     );
     if (!installed) {
       // The lens failed to install; keep the blur so the pane still reads as glass.

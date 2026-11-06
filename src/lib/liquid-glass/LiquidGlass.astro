@@ -3,8 +3,9 @@
  * Liquid glass container.
  *
  * Vendored from [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass)
- * (MIT, © Nik Delvin). The displacement map, chromatic split, rim, and layer
- * order are unchanged. Only the wiring this site needs is adapted:
+ * (MIT, © Nik Delvin). The displacement map, rim, and layer order are
+ * unchanged; the chromatic split is commented out in filter.ts. Only the
+ * wiring this site needs is adapted:
  *
  * - `radius` writes the corner radius into the inline style that the renderer
  *   reads for the map; `tint` themes the overlay instead of one hard-coded
@@ -24,6 +25,7 @@ interface Props {
   class?: string;
   depth?: number;
   strength?: number;
+  /** R/B split handed to filter.ts; dispersion is currently disabled there. */
   chromaticAberration?: number;
   blur?: number;
   color?: "black" | "white" | "transparent";

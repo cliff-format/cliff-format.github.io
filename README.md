@@ -25,7 +25,7 @@ src/
 
 正文只用两族：Smiley Sans（得意黑）承担全部文案与界面，JetBrains Mono 只用于文件内容与安装命令。背景装饰字符例外：使用一份合并的 OFL **Field Sans**——Noto Sans 提供全部拉丁与西里尔（含 4 个拉丁扩展字符），Noto Sans KR 提供 CJK、日文假名与韩文；共 126 字，合并为一个字体文件，背景不再使用 Smiley。Field Sans 的每个字形固定 1em advance，背景字重由 400 合成到 600。正文的字重只有 400。
 
-玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 `LiquidGlass`：`src/lib/liquid-glass/` 是它的副本，位移图、三通道色散、rim 和层序都由库生成，`mount.ts` 只负责挂载和尺寸。面板沿用 40px 的 G2 圆角（`corner-shape: squircle`）、胶囊按钮 999px，二者通过 `radius` 同步给位移图，位移图再按计算出的 `corner-shape` 画同一条超椭圆；底板色由主题的 `--lg-tint` 提供，材质是 `blur 3` 的轻磨砂加一层 `--glass-frost` 的浅白染色。结构约定见 [docs/style.md](docs/style.md)，许可声明见 [THIRD-PARTY.md](THIRD-PARTY.md)。
+玻璃用 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 的 `LiquidGlass`：`src/lib/liquid-glass/` 是它的副本，位移图、rim 和层序都由库生成；三通道色散保留在 `filter.ts` 里但已注释停用（6% 字场上的分离实测 2–3/255，肉眼不可见），`mount.ts` 只负责挂载和尺寸。面板沿用 40px 的 G2 圆角（`corner-shape: squircle`）、胶囊按钮 999px，二者通过 `radius` 同步给位移图，位移图再按计算出的 `corner-shape` 画同一条超椭圆；底板色由主题的 `--lg-tint` 提供，材质是 `blur 3` 的轻磨砂加一层 `--glass-frost` 的浅白染色。结构约定见 [docs/style.md](docs/style.md)，许可声明见 [THIRD-PARTY.md](THIRD-PARTY.md)。
 
 ## 命令
 
@@ -55,7 +55,7 @@ python scripts/noto-unicode-range.py     # 同步 Noto Sans SC 的 unicode-range
 
 背景漂移按 20 Hz 采样：`text-track` 仍是同一条 transform 循环，但 `steps()` 每 50ms 才前进一步。最快可见行每步小于 1.5px，读起来仍是连续漂移；线性 60fps 漂移会让每块玻璃的 backdrop 每帧重算。玻璃的光学参数与滤镜面积不变。
 
-滚动时每块玻璃原地切换成单通道位移滤镜（同一个 `<filter>`，只替换图元）：位移、`blur`、tint、frost 都保留，只有 R/B 色散暂停；停止滚动约 140ms 后开始约 0.48s 的色散渐入。这 140ms 合并滚轮/触控板的连续 tick，避免渐入被下一 tick 打断。起始帧是 cab 0，与单通道逐像素一致，所以不会跳变。背景文字照常漂移。2560×1440 实测滚动阶段约 40–130fps（headless Edge；首轮滚动换滤镜时较低，稳定后 100+），不再掉到 20–30fps；静止画面与三通道版本逐字节一致。
+玻璃滤镜是单通道位移：三通道色散已注释停用，滚动时不再切换滤镜，也没有色散渐入；`app.ts` 的滚动回调只负责跟随吸顶页头移动语言菜单。背景文字照常漂移，20 Hz 采样与滤镜共享保持不变。
 
 玻璃滤镜是增强项：`load` 后由 `requestIdleCallback` 逐块生成（每次最多一块，100ms 超时兜底），不要改回首屏同步初始化或一次生成全部。`backdrop-filter: url()` 在 backdrop 移动时由软件栅格化，代价与滤镜面积成正比；试过把面板拆成“中心模糊 + 四条边缘条做位移”来缩小面积，但位移最多要拉 `strength` 像素的背景，比它窄的条带会露出深色硬边，所以维持整块滤镜。
 

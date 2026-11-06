@@ -119,7 +119,7 @@ button {
 /* Glass ------------------------------------------------------------- */
 
 /* One pane = one sheet of glass. The material — live backdrop refraction,
-   chromatic dispersion, rim — comes from src/lib/liquid-glass. This file keeps
+   rim — comes from src/lib/liquid-glass. This file keeps
    only the lens geometry (radius, elevation) and the surface layout. Never add
    a backdrop-filter here: the pane's own background would sit over the bent
    backdrop and hide it. */

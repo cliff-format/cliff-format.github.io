@@ -120,33 +120,15 @@ langMenu?.addEventListener("toggle", () => {
 langButton?.addEventListener("click", () => requestAnimationFrame(repositionLangMenu));
 addEventListener("resize", repositionLangMenu, { passive: true });
 
-/* Scrolling changes every backdrop per frame. Tell the glass to swap to its
-   one-pass filter twin for the duration of the scroll: the lens keeps bending,
-   only the three-way dispersion pauses. The field keeps drifting. */
-// A wheel emits one scroll event per tick and scrollend after each tick; a
-// short settle delay coalesces them so the 480ms fade is not cancelled by the
-// next tick. It still starts close enough to the stop to read as immediate.
-const STOP_DELAY = 140;
-let stopTimer = 0;
-let scrolling = false;
-
-function setScrolling(next: boolean): void {
-  if (scrolling === next) return;
-  scrolling = next;
-  document.dispatchEvent(new CustomEvent("lg-scroll", { detail: next }));
-}
-
+/* The language popover is anchored to a button inside a sticky header, so it
+   follows the header while the page scrolls. */
 addEventListener(
   "scroll",
   () => {
-    setScrolling(true);
-    clearTimeout(stopTimer);
-    stopTimer = window.setTimeout(() => setScrolling(false), STOP_DELAY);
     repositionLangMenu();
   },
   { passive: true },
 );
-
 
 /* Copy-to-clipboard for the install command in the footer. */
 for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {

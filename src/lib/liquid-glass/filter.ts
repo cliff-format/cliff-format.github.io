@@ -4,6 +4,8 @@
 // (MIT, © Nik Delvin), src/utils/liquidGlass.ts. The maths is unchanged: a
 // neutral response map, an inset rounded rectangle for the untouched centre,
 // and three feDisplacementMap passes that split R, G, and B for dispersion.
+// The three-pass graph is commented out at the bottom of this file; every
+// filter is currently the single-pass lens.
 //
 // One addition: `cornerExponent` carries the pane's G2 corner shape into the
 // map. CSS `corner-shape: squircle` computes to `superellipse(2)`, which is a
@@ -16,6 +18,7 @@ type DisplacementOptions = {
   radius: number;
   depth: number;
   strength?: number;
+  /** R/B split for the commented-out three-pass graph; unused while disabled. */
   chromaticAberration?: number;
   /** Superellipse exponent of the corners; 2 is circular, 4 is a squircle. */
   cornerExponent?: number;
@@ -139,16 +142,14 @@ export const getDisplacementMap = ({
 </svg>`;
 
 /** The filter as SVG markup. The mount installs it into the document: a data
-    URI is re-parsed every time the backdrop is sampled. With zero chromatic
-    aberration the filter collapses to one displacement pass; the scroll
-    material uses that form to keep the lens without the dispersion cost. */
+    URI is re-parsed every time the backdrop is sampled. Dispersion is disabled
+    below, so every filter is the single-pass lens. */
 export const getDisplacementFilterMarkup = ({
   height,
   width,
   radius,
   depth,
   strength = 100,
-  chromaticAberration = 0,
   cornerExponent = 2,
 }: DisplacementOptions) => {
   const image = `<feImage x="0" y="0" height="${height}" width="${width}" href="data:image/svg+xml;utf8,${encodeURIComponent(
@@ -164,6 +165,12 @@ export const getDisplacementFilterMarkup = ({
                 yChannelSelector="G"
             />`;
 
+  // Chromatic dispersion is disabled: the site's only backdrop is a 6%-opacity
+  // glyph field, where the three-pass split measured 2–3/255 and never read as
+  // color. To restore it, uncomment this block, destructure `chromaticAberration`
+  // again, return the block when the value is above 0, and re-enable the prop
+  // on the glass components.
+  /*
   const dispersed = `${image}
             <feDisplacementMap
                 transform-origin="center"
@@ -213,11 +220,12 @@ export const getDisplacementFilterMarkup = ({
                         />
               <feBlend in="displacedR" in2="displacedG" mode="screen"/>
               <feBlend in2="displacedB" mode="screen"/>`;
+  */
 
   return `<svg height="${height}" width="${width}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
     <defs>
         <filter id="displace" color-interpolation-filters="sRGB">
-            ${chromaticAberration > 0 ? dispersed : singlePass}
+            ${singlePass}
         </filter>
     </defs>
 </svg>`;

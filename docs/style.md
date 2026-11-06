@@ -60,7 +60,7 @@
 
 ## 液态玻璃
 
-玻璃由 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 渲染。`src/lib/liquid-glass/` 是它的副本：位移图、三通道色散、rim 与层序都照原样，本地只加了几处接线——`radius` 把圆角写进渲染器读取的 inline style，`tint` 与 `frost` 让主题提供染色，挂载推迟到 load 后的空闲时间。不要在这里手写 `backdrop-filter`、filter 或位移图。
+玻璃由 [nikdelvin/liquid-glass](https://github.com/nikdelvin/liquid-glass) 渲染。`src/lib/liquid-glass/` 是它的副本：位移图、rim 与层序都照原样；三通道色散的图元保留在 `filter.ts` 里但已注释停用（背景只有 6% 不透明的字形场，分离实测 2–3/255，肉眼不可见）。本地只加了几处接线——`radius` 把圆角写进渲染器读取的 inline style，`tint` 与 `frost` 让主题提供染色，挂载推迟到 load 后的空闲时间。不要在这里手写 `backdrop-filter`、filter 或位移图。
 
 结构是 `<LiquidGlass class="… pane" radius={40}>` 包住 `.pane-surface`：
 
@@ -74,15 +74,15 @@
 
 - **圆角是 G2**：`.pane` 的 `corner-shape: squircle` 计算为 `superellipse(2)`；`.lg-filter-layer` 与 `.glass-box` 用 `corner-shape: inherit` 继承同一形状，位移图再按计算值画同一条超椭圆（指数 `2^k`，squircle 即 4）。圆角只写一处，`radius` 只把半径数值告诉位移图；胶囊按钮传 `999`，脚本按盒子高度夹紧。不支持 `corner-shape` 的浏览器退回圆形圆角，位移图同步退回 `rx/ry`。
 - **不给 `.pane` 加背景**：面板背景会画在折射层之上，把效果盖掉。底板色由库的叠层提供，面板色调在 `graphite.css` 的 `--glass-*-tint`。
-- `depth` 是边缘厚度，`strength` 是位移强度，`chromaticAberration` 是 R/B 分离；面板用 `depth 10 / strength 100 / cab 2`（库默认厚度，再厚边缘就像一圈厚玻璃），按钮用 `depth 8 / strength 80 / cab 2`。
+- `depth` 是边缘厚度，`strength` 是位移强度；面板用 `depth 10 / strength 100`（库默认厚度，再厚边缘就像一圈厚玻璃），按钮用 `depth 8 / strength 80`。`chromaticAberration` 留在 API 里，但当前停用。
 - `blur` 是磨砂量，面板和按钮都是 `3`：滤镜链是 `blur(1.5px)` → 位移 → `blur(3px)`，背景字符糊成雾面但仍认得出结构。再往上（5 以上）只剩毛玻璃，折射边缘也一起糊掉。
 - **滤镜整块盖住面板**：位移最多要从面板里侧拉 `strength` 像素的背景。试过把面板拆成“中心只模糊 + 四条 `depth` 宽的边缘条做位移”来省栅格化面积，边缘条窄于位移距离，没有可拉的背景，每条边都会露出一道深色硬边，所以退回了整块滤镜。
 - 磨砂之上还有一层 `.lg-frost`：很浅的白色染色，深色主题 `rgba(255,255,255,.045)`、浅色 `0.12`，让材质读起来是“乳白玻璃”而不是纯折射。它压在滤镜层之上，所以只会提亮，不会盖住弯折。
 - 面积越小，透镜要越弱：语言菜单是 `depth 6 / strength 40`。菜单只有 380px 高，`strength 100` 会把上方页头的高光拉进三分之一的面板，成一块发亮的斑。
 - 玻璃可以嵌套：CTA 面板里就放着两块玻璃按钮。挂载用 `:scope > .lg-filter-layer > .glass-box` 只找自己的层；写成普通 `querySelector` 会先命中内层，面板自己就永远没有滤镜。
-- 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。滤镜按几何签名（尺寸、半径、深度、色散、圆角指数）缓存并共享；六张特性卡共用一个，尺寸变化时才重建。每个滤镜同时保存三通道静止图元与单通道滚动图元，滚动时原地替换，不换 id。
+- 滤镜挂在文档里的一个 `<svg><defs>` 上，用 `url(#lg-filter-n)` 引用：data-URI 每次采样都要重新解析，文档内滤镜只解析一次。滤镜按几何签名（尺寸、半径、深度、色散、圆角指数）缓存并共享；六张特性卡共用一个，尺寸变化时才重建。每个滤镜只有一套单通道位移图元，滚动时不再替换。
 - 滤镜在 load 后由 `requestIdleCallback` 逐块挂载（每次最多一块，100ms 超时兜底）：首屏只有叠层和 rim，避免一次生成全部滤镜的长任务。
-- **滚动只暂停色散**：滚动事件让已挂载的滤镜换成单通道位移图元，折射、`blur`、tint、frost 不变，R/B 色散暂停；停止滚动约 140ms 后开始，三个位移 scale 在约 0.48s 内从 cab 0 渐入到 cab 2。cab 0 的三通道帧与单通道逐像素一致，所以恢复没有跳变。背景漂移不暂停。这样滚动时不会逐帧软件栅格化三次 `feDisplacementMap`，2560×1440 从 20–30fps 回到 40–130fps（首轮换滤镜后 100+）。
+- **色散停用**：滤镜是单通道位移，`filter.ts` 里的三通道图元被注释保留。本站背景只有 6% 不透明的字形场，三通道分离实测只产生 2–3/255 的色差，肉眼不可见；页头滚动时看到的彩色边缘来自正文被折射，不是页头额外开了色散。停用后滚动不再切换滤镜，也没有色散渐入，`app.ts` 的滚动回调只负责跟随吸顶页头移动语言菜单。恢复时取消 `filter.ts` 的注释，并给玻璃组件重新加上 `chromaticAberration`。
 - 禁用 JS 时面板退回 `--m3-surface-container` 实色 + 1px 描边；`prefers-reduced-transparency: reduce` 隐藏滤镜层并同样退回实色。
 - 按钮统一走 `src/components/GlassButton.astro`：同一个 `LiquidGlass`、同一套光学参数，`brand` 只是把中性叠层换成绿色叠层，链接本身不再画底色。`--glass-brand-tint` 故意接近不透明：绿色一旦调透，浅色主题会洗成薄荷绿，深色主题的标签对比也会掉。
 - JavaScript 在 `src/lib/liquid-glass/mount.ts`；主题、阴影与每块玻璃的色调在 `graphite.css`，结构在 `base.css`。

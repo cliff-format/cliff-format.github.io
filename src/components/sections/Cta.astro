@@ -12,7 +12,7 @@ const { locale } = Astro.props;
 ---
 
 <section class="cta wrap">
-  <LiquidGlass class="cta-panel pane" radius={40} depth={10} blur={3} chromaticAberration={2}>
+  <LiquidGlass class="cta-panel pane" radius={40} depth={10} blur={3}>
     <div class="cta-surface pane-surface">
       <h2>{t(locale, "cta-heading-1")}<br /><em>{t(locale, "cta-heading-2")}</em></h2>
       <p class="cta-copy">{t(locale, "cta-body")}</p>
